@@ -1,9 +1,10 @@
 package cards;
 
-public class GreenCard {
-
-	public GreenCard() {
-		// TODO Auto-generated constructor stub
+public class GreenCard extends Card {
+	private int id;
+	public GreenCard(String text, int id){
+		super.text = text;
+		this.id = id;
 	}
 
 }

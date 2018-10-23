@@ -1,8 +1,9 @@
 package cards;
 
 public class RedCard extends Card{
-
-	public RedCard(){
-		
+	private int id;
+	public RedCard(String text, int id){
+		super.text = text;
+		this.id = id;
 	}
 }
