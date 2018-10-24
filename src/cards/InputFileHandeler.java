@@ -18,7 +18,7 @@ public class InputFileHandeler {
 		 * @return      an ArrayList with the content of the file. 
 		 */
 		public ArrayList<String> scan(String textfile) {
-			ArrayList<String> scanned = new ArrayList();
+			ArrayList<String> scanned = new ArrayList<String>();
 			
 			try {
 				File file = new File(textfile);				

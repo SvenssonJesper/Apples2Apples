@@ -292,7 +292,7 @@ public class Apples2Apples {
 
 			for(int i=0; i<players.size(); i++) {
 				if(i!=judge) {
-					Player currentPlayer = players.get(i);
+					final Player currentPlayer = players.get(i);
 
 					//Make sure every player can answer at the same time
 					Runnable task = new Runnable() {

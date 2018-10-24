@@ -7,10 +7,12 @@ public class CardFactory {
 	private String redApplesFile, greenApplesFile;
 	private InputFileHandeler inputFileHandeler;
 	private ArrayList<Card> redCardsDeck, greenCardsDeck;
-	public CardFactory(String redApplesFile, String greenApplesFile, InputFileHandeler inputFileHandeler) {
+	public CardFactory(String redApplesFile, String greenApplesFile) {
 		this.redApplesFile = redApplesFile;
 		this.greenApplesFile = greenApplesFile;
-		this.inputFileHandeler = inputFileHandeler;
+		this.inputFileHandeler = new InputFileHandeler();
+		this.redCardsDeck = new ArrayList<Card>();
+		this.greenCardsDeck = new ArrayList<Card>();
 	}
 	/**
 	 * Creates a deck for red and green cards and shuffle them
@@ -29,28 +31,25 @@ public class CardFactory {
 	
 	private void createUnShuffledDecks(){
 		//load an ArrayList with Strings from the assigned file and loads them to the Card Arrays as Cards.
-		System.out.println("hej");
 		ArrayList<String> temp = this.inputFileHandeler.scan(this.redApplesFile);
-		System.out.println(temp.size());
-		for(int i = 0; i <= temp.size(); i++){
-			this.redCardsDeck.add(new RedCard("test",i));  
+		for(int i = 0; i < temp.size(); i++){
+			this.redCardsDeck.add(new RedCard(temp.get(i),i));  
 		}
-		System.out.println("tja");
 		temp = this.inputFileHandeler.scan(this.greenApplesFile);
-		for(int i = 0; i <= temp.size(); i++){
+		for(int i = 0; i < temp.size(); i++){
 			this.greenCardsDeck.add(new GreenCard(temp.get(i),i));  
 		}
 	}
 	/**
 	 * @return      an ArrayList with the redCards. 
 	 */
-	public ArrayList getRedCardsDeck() {
+	public ArrayList<Card> getRedCardsDeck() {
 		return redCardsDeck;
 	}
 	/**
 	 * @return      an ArrayList with the greenCards. 
 	 */
-	public ArrayList getGreenCardsDeck() {
+	public ArrayList<Card> getGreenCardsDeck() {
 		return greenCardsDeck;
 	}
 	

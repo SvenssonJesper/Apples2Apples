@@ -6,4 +6,8 @@ public class RedCard extends Card{
 		super.text = text;
 		this.id = id;
 	}
+	
+	public String getText(){
+		return super.text;
+	}
 }
