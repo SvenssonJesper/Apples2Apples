@@ -14,8 +14,8 @@ public class DeckFactory {
 	 * Creates a deck for red cards
 	 * @return a deck
 	 */
-	public Deck createRedDeck(String redApplesFile) {
-		Deck deck = new Deck();
+	public Deck<RedCard> createRedDeck(String redApplesFile) {
+		Deck<RedCard> deck = new Deck<RedCard>();
 		//load an ArrayList with Strings from the assigned file and loads them to the Card Arrays as Cards.
 		ArrayList<String> temp = this.inputFileHandeler.scan(redApplesFile);
 		for(int i = 0; i < temp.size(); i++){
@@ -28,8 +28,8 @@ public class DeckFactory {
 	 * Creates a deck for green cards
 	 * @return a deck
 	 */
-	public Deck createGreenDeck(String greenApplesFile) {
-		Deck deck = new Deck();
+	public Deck<GreenCard> createGreenDeck(String greenApplesFile) {
+		Deck<GreenCard> deck = new Deck<GreenCard>();
 		//load an ArrayList with Strings from the assigned file and loads them to the Card Arrays as Cards.
 		ArrayList<String> temp = this.inputFileHandeler.scan(greenApplesFile);
 		for(int i = 0; i < temp.size(); i++){

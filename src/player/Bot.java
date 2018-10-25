@@ -1,7 +1,9 @@
 package player;
 
+
 public class Bot extends Player{
-	public Bot() {
-		
+	public Bot(int id) {
+		super(id);
 	}
+	
 }

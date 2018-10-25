@@ -1,7 +1,7 @@
 package player;
 
 public class Human extends Player{
-	public Human() {
-		
+	public Human(int id) {
+		super(id);
 	}
 }

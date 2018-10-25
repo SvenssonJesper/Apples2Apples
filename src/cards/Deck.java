@@ -3,13 +3,13 @@ package cards;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Deck {
-	private ArrayList<Card> deck;
+public class Deck<CardType> {
+	private ArrayList<CardType> deck;
 	public Deck() {
-		this.deck = new ArrayList<Card>();
+		this.deck = new ArrayList<CardType>();
 	}
 	
-	 void add(Card card) {
+	 void add(CardType card) {
 		this.deck.add(card);
 	}
 	
@@ -18,7 +18,7 @@ public class Deck {
 		Collections.shuffle(this.deck);
 	}
 	
-	public Card popCard() {
+	public CardType popCard() {
 		return deck.remove(0);
 		
 	}
