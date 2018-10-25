@@ -1,10 +1,9 @@
 package cards;
 
 public class GreenCard extends Card {
-	private int id;
-	public GreenCard(String text, int id){
+
+	public GreenCard(String text){
 		super.text = text;
-		this.id = id;
 	}
 
 }
