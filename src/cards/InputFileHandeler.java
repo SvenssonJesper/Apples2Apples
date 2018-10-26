@@ -17,22 +17,22 @@ public class InputFileHandeler {
 		 * @param  textfile  a file that ... 
 		 * @return      an ArrayList with the content of the file. 
 		 */
-		public ArrayList<String> scan(String textfile) {
-			ArrayList<String> scanned = new ArrayList<String>();
+		public ArrayList<String> scan(String textfile) throws FileNotFoundException{
+			ArrayList<String> temp = new ArrayList<String>();
 			
 			try {
 				File file = new File(textfile);				
 		        Scanner sc = new Scanner(file);
 		        
 		        while (sc.hasNextLine()) {
-		            scanned.add(sc.nextLine());
+		            temp.add(sc.nextLine());
 		        }
 		        sc.close();
 		    } 
 		    catch (FileNotFoundException e) {
-		        e.printStackTrace();
+		        throw new FileNotFoundException();
 		    }
-			return scanned;
+			return temp;
 		}
 }
 

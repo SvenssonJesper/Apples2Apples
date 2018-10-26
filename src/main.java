@@ -5,7 +5,7 @@ public class main {
 
 	public static void main(String[] args) {		
 		DeckFactory testFac = new DeckFactory();
-		Deck<RedCard> deck = testFac.createRedDeck("redApples.txt");
+		Deck<GreenCard> deck = testFac.createGreenDeck("greenApples.txt");
 		deck.shuffle();
 		Bot bot = new Bot(1);
 		bot.addCardToHand(deck.popCard());

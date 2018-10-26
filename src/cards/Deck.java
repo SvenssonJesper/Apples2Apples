@@ -18,8 +18,11 @@ public class Deck<CardType> {
 		Collections.shuffle(this.deck);
 	}
 	
-	public CardType popCard() {
+	public CardType popCard(){
 		return deck.remove(0);
-		
+	}
+	
+	public int size() {
+		return deck.size();
 	}
 }
