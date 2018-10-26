@@ -14,7 +14,7 @@ public class InputFileHandeler {
  		 * Scanns a textfile and return the content in an ArrayList.
  		 * Each line becomes an element.
 		 *
-		 * @param  textfile  a file that ... 
+		 * @param  textfile  a file that contains Strings that represents cards 
 		 * @return      an ArrayList with the content of the file. 
 		 */
 		public ArrayList<String> scan(String textfile) throws FileNotFoundException{
