@@ -13,7 +13,8 @@ import java.util.Scanner;
 import org.junit.Test;
 
 import cards.*;
-import player.Bot;
+import player.*;
+
 
 public class DeckTest {
 	
@@ -41,12 +42,12 @@ public class DeckTest {
 		
 		int lenght = (temp.size()>deck.size())?deck.size():temp.size();
 		for(int i = 0; i < lenght; i++) {
-			assertEquals(temp.get(i), deck.popCard().getText());
+			assertEquals(temp.get(i), deck.popCard().toString());
 		}
     }
 	
 	@Test
-	public void incorrectFileName() {
+	public void incorrectGreenFileName() {
 		String filename = "noFile.txt";
 //		create deck with DeckFactory
 		DeckFactory testFac = new DeckFactory();
@@ -54,9 +55,10 @@ public class DeckTest {
 		System.setIn(in);
 		System.setIn(System.in);
 		Deck<GreenCard> deck = testFac.createGreenDeck(filename);
-		
 	}
 	
+	
+
 	
 	@Test
     public void createRedDeck()
@@ -82,7 +84,7 @@ public class DeckTest {
 		
 		int lenght = (temp.size()>deck.size())?deck.size():temp.size();
 		for(int i = 0; i < lenght; i++) {
-			assertEquals(temp.get(i), deck.popCard().getText());
+			assertEquals(temp.get(i), deck.popCard().toString());
 		}
     }
 	@Test
@@ -90,9 +92,9 @@ public class DeckTest {
 		DeckFactory testFac = new DeckFactory();
 		Deck<GreenCard> deck = testFac.createGreenDeck("greenApples.txt");
 //		get first card in the green apples file
-		assertEquals("[Absurd] - (ridiculous, senseless, foolish) ", deck.popCard().getText());
-		assertEquals("[Abundant] - (plentiful, ample, numerous) ", deck.popCard().getText());
-		assertEquals("[Addictive] - (obsessive, consuming, captivating) ", deck.popCard().getText());
+		assertEquals("[Absurd] - (ridiculous, senseless, foolish) ", deck.popCard().toString());
+		assertEquals("[Abundant] - (plentiful, ample, numerous) ", deck.popCard().toString());
+		assertEquals("[Addictive] - (obsessive, consuming, captivating) ", deck.popCard().toString());
 		
 	}
 	
@@ -100,10 +102,55 @@ public class DeckTest {
 	public void testBotHand(){
 		DeckFactory testFac = new DeckFactory();
 		Deck<GreenCard> deck = testFac.createGreenDeck("greenApples.txt");
-		Bot bot = new Bot(1);
+		Hand hand = new Hand();
+		Bot bot = new Bot(1, hand);
 		bot.addCardToHand(deck.popCard());
 		bot.addCardToHand(deck.popCard());
 		bot.addCardToHand(deck.popCard());
-		assertEquals("[Addictive] - (obsessive, consuming, captivating) ", bot.playCard(2).getText());
+		assertEquals("[Addictive] - (obsessive, consuming, captivating) ", bot.playCard(2).toString());
 	}
 }
+
+
+//Test with Thread not working atm.
+
+//@Test
+//public void incorrectRedFileName() {
+//	String filename = "noFile.txt";
+////	create deck with DeckFactory
+//	DeckFactory testFac = new DeckFactory();
+//	
+//	final Thread createDeck = new Thread(new Runnable() {
+//
+//		public void run(){
+//			String filename = "noFile.txt";
+////			create deck with DeckFactory
+//			DeckFactory testFac = new DeckFactory();
+//			 Deck<RedCard> deck = testFac.createRedDeck(filename);
+//		}
+//	 });
+//	final Thread generateInput = new Thread(new Runnable() {
+//			public void run(){			
+//				ByteArrayInputStream in = new ByteArrayInputStream("greenApples.txt".getBytes());
+//				System.setIn(in);
+//				System.setIn(System.in);
+//		  }
+//		});
+//	
+//	for(int i = 0; i < 10; i++) {
+//		createDeck.start();
+//		generateInput.start();
+////		try {
+////			createDeck.sleep(100);
+////		} catch (InterruptedException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+////		try {
+////			generateInput.sleep(100);
+////		} catch (InterruptedException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+//	}
+//}

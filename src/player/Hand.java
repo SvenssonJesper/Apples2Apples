@@ -6,26 +6,26 @@ import cards.Card;
 
 public class Hand {
 	private ArrayList<Card> hand;
-	Hand () {
+	public Hand () {
 		this.hand = new ArrayList<Card>();
 	}
 	
-	void add(Card card) {
+	public void add(Card card) {
 		this.hand.add(card);
 	}
 	
-	int getSize() {
+	public int getSize() {
 		return hand.size();
 	}
 	
-	Card playCard(int index) {
+	public Card playCard(int index) {
 		return this.hand.remove(index);
 	}
 	
-	ArrayList<String> getAllCardsText(){
-		ArrayList<String> temp = new ArrayList<String>();
+	public String toString(){
+		String temp = "";
 		for (Card card : this.hand) {
-			temp.add(card.getText()); 
+			temp = temp + ";" + card.toString(); 
 		}
 		return temp;
 	}

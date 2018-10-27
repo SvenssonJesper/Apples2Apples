@@ -1,5 +1,8 @@
 package player;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import cards.Card;
@@ -9,10 +12,10 @@ public abstract class Player {
 	protected Hand hand;
 	protected ArrayList<GreenCard> points;
 	protected int id;
-	public Player(int id) {
+	public Player(int id, Hand hand) {
 		this.id = id;
 		points = new ArrayList<GreenCard>();
-		this.hand = new Hand();
+		this.hand = hand;
 	}
 	
 	public void addCardToHand(Card card) {
@@ -39,7 +42,7 @@ public abstract class Player {
 		return this.id;
 	}
 	
-	public ArrayList<String> getAllCardsTextInHand(){
-		return this.hand.getAllCardsText();
+	public String getAllCardsTextInHand(){
+		return this.hand.toString();
 	}
 }
