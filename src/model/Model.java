@@ -11,6 +11,7 @@ public class Model {
 	private ArrayList<Player> players;
 	private Player judge;
 	private int maxHandSize = 7;
+	private GreenCard currentGreenCard;
 	public Model(Deck redDeck, Deck greenDeck) {
 		this.redDeck = redDeck;
 		this.greenDeck = greenDeck;
@@ -37,8 +38,21 @@ public class Model {
 		}
 	}
 	
+	public Player getJudge() {
+		return judge;
+	}
+	
+	public void setJudge(Player judge) {
+		this.judge = judge;
+	}
+	
 	public GreenCard popGreenCard() {
-		return (GreenCard) greenDeck.popCard();
+		currentGreenCard = (GreenCard) greenDeck.popCard();
+		return currentGreenCard;
+	}
+	
+	public GreenCard getCurrentGreenCard() {
+		return currentGreenCard;
 	}
 	
 }

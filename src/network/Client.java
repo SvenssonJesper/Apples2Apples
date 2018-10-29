@@ -30,7 +30,7 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("client connected successfully");
+		System.out.println("connected successfully");
 		try {
 			client.run();
 		} catch (IOException e) {
@@ -47,22 +47,16 @@ public class Client {
 	public void run() throws IOException {
 		boolean run = true;
 		while (run){
-//			if(in.ready()) {
-				String input = this.in.readLine();
-				switch(input) {
-					case "input": {
-						this.outputStream.writeBytes(readInput() + "\n");
-						this.outputStream.flush();
-						break;
-					}
-					case "exit":{ 
-						run = false;
-						break;
-					}
-					default:{ 
-						System.out.println(input);
-					}
-//				}
+			String input = this.in.readLine();
+			switch(input) {
+				case "input": {
+					this.outputStream.writeBytes(readInput() + "\n");
+					this.outputStream.flush();
+					break;
+				}
+				default:{ 
+					System.out.println(input);
+				}
 			}
 		}
 	}
@@ -70,14 +64,23 @@ public class Client {
 	private String readInput() {
 		String input;
 		try{
+//			clearBufferedReader();
 			input = this.br.readLine();
-			System.out.println(input);
 		}catch(IOException er){
 			System.out.println("Bad input");
 			input = readInput();
 		}
 		return input;
 	}
+	
+	private void clearBufferedReader() throws IOException {
+		String str = null;
+		while((str = br.readLine()) != null){ 
+			  
+		}
+	}
+	
+
 }
 
 

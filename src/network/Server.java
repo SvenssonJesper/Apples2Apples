@@ -27,6 +27,7 @@ public class Server {
 	
 	private void setUpClients() throws IOException {
 		for(int onlineClient=0; onlineClient<numberOfClients; onlineClient++) {
+			System.out.println("waiting for " + (numberOfClients - onlineClient) + " client(s) to connect");
 			Socket client = this.server.accept();
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			DataOutputStream outputStream = new DataOutputStream(client.getOutputStream());
