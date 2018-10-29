@@ -23,25 +23,36 @@ public class Server {
 		this.model = model;
 		server = new ServerSocket(port);
 		setUpClients();
-
-
 	}
 	
 	private void setUpClients() throws IOException {
 		for(int onlineClient=0; onlineClient<numberOfClients; onlineClient++) {
-			System.out.println("waiting for client");
 			Socket client = this.server.accept();
-			System.out.println("client accepted");
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			DataOutputStream outToClient = new DataOutputStream(client.getOutputStream());
-			Hand hand = new Hand();
-			for(int i=0; i<7; i++) { //Deal 7 cards to the online Player
-				hand.add(model.popRedCard());			
-			}
-			outToClient.writeBytes(hand.toString());
-			model.addPlayer(new Human(onlineClient, hand, client, inFromClient, outToClient));
+			DataOutputStream outputStream = new DataOutputStream(client.getOutputStream());
+			model.addPlayer(new Human(onlineClient, client, inFromClient, outputStream));
 			System.out.println("Connected to " + "Player ID: " + (onlineClient));
 		}
-
+	}
+	
+	public void sendTextToClient(Player player, String text){	
+		try {
+			((Human) player).getOutputStream().writeBytes(text+"\n");
+			((Human) player).getOutputStream().flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+	
+	public String requireInput(Player player) throws IOException {
+		sendTextToClient(player, "input");
+		return ((Human) player).getInputStream().readLine();
 	}
 }
+//
+//Hand hand = new Hand();
+//for(int i=0; i<7; i++) { //Deal 7 cards to the online Player
+//	hand.add(model.popRedCard());			
+//}
+//System.out.println(hand.toString());

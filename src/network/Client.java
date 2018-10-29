@@ -11,34 +11,72 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Client {
-	public static void main(String[] args) throws IOException, UnknownHostException {
-		Socket socket = new Socket("127.0.0.1", 4545);
-		
-		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		
-		System.out.println("client startar");
-		System.out.println(inFromServer.read());
-		//Get the hand of apples from server
-//		String[] applesString = (inFromServer.readLine()).split(";");
-//		ArrayList<String> hand = new ArrayList<String>(Arrays.asList(applesString));
-//		System.out.println("Testa Skriv här boi:");
-//		String input = "";
-//		try{
-//			input = br.readLine();
-//			
-//		}catch(IOException er){
-//			System.out.println("Bad input");
-//		}
-//		
-//		out.writeBytes(input);
-//		out.flush();
-//		
-//		int response = inFromServer.read();
-//		
-//		System.out.println(response);
-
+	Socket socket;
+	DataOutputStream outputStream;
+	BufferedReader in, br;
+	String ip;
+	int port;
+	
+	public Client(String ip, int port){
+		this.ip = ip;
+		this.port = port;
+		br = new BufferedReader(new InputStreamReader(System.in));
+	}
+	
+	public static void main(String[] args){
+		Client client = new Client(args[0], Integer.parseInt(args[1]));
+		try {
+			client.connect();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("client connected successfully");
+		try {
+			client.run();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void connect() throws java.net.UnknownHostException, IOException {
+		this.socket = new Socket(this.ip, this.port);
+		this.outputStream = new DataOutputStream(socket.getOutputStream());
+		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	}
+	
+	public void run() throws IOException {
+		boolean run = true;
+		while (run){
+//			if(in.ready()) {
+				String input = this.in.readLine();
+				switch(input) {
+					case "input": {
+						this.outputStream.writeBytes(readInput() + "\n");
+						this.outputStream.flush();
+						break;
+					}
+					case "exit":{ 
+						run = false;
+						break;
+					}
+					default:{ 
+						System.out.println(input);
+					}
+//				}
+			}
+		}
+	}
+	
+	private String readInput() {
+		String input;
+		try{
+			input = this.br.readLine();
+			System.out.println(input);
+		}catch(IOException er){
+			System.out.println("Bad input");
+			input = readInput();
+		}
+		return input;
 	}
 }
 

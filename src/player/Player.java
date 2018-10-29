@@ -12,10 +12,10 @@ public abstract class Player {
 	protected Hand hand;
 	protected ArrayList<GreenCard> points;
 	protected int id;
-	public Player(int id, Hand hand) {
+	public Player(int id) {
 		this.id = id;
 		points = new ArrayList<GreenCard>();
-		this.hand = hand;
+		this.hand = new Hand();
 	}
 	
 	public void addCardToHand(Card card) {
@@ -44,5 +44,9 @@ public abstract class Player {
 	
 	public String getAllCardsTextInHand(){
 		return this.hand.toString();
+	}
+	
+	public boolean isHuman() {
+		return true;
 	}
 }

@@ -25,6 +25,20 @@ public class Model {
 		return (RedCard) redDeck.popCard();
 	}
 	
+	public ArrayList<Player> getPlayers(){
+		return this.players;
+	}
 	
+	public void dealRedCards() {
+		for(Player player:this.players) {
+			while(player.getHandSize() < this.maxHandSize) {
+				player.addCardToHand(popRedCard());
+			}
+		}
+	}
+	
+	public GreenCard popGreenCard() {
+		return (GreenCard) greenDeck.popCard();
+	}
 	
 }

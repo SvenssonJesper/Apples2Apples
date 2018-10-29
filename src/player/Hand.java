@@ -24,8 +24,10 @@ public class Hand {
 	
 	public String toString(){
 		String temp = "";
+		int counter = 0;
 		for (Card card : this.hand) {
-			temp = temp + ";" + card.toString(); 
+			temp = temp + "[" + counter + "]" + card.toString() + "\n"; 
+			counter++;
 		}
 		return temp;
 	}

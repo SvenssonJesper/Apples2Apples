@@ -8,23 +8,23 @@ import player.*;
 
 public class main {
 
-	public static void main(String[] args) {		
-		DeckFactory testFac = new DeckFactory();
-		Deck<GreenCard> greenDeck = testFac.createGreenDeck("greenApples.txt");
-		greenDeck.shuffle();
-		Deck<RedCard> redDeck = testFac.createRedDeck("redApples.txt");
-		redDeck.shuffle();
-		Model model = new Model(redDeck, greenDeck);
-		System.out.println("so far so good");
-		try {
-			Server server = new Server(1, model, 4545);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static void main(String[] args) {
+		Game game;
+		switch(args.length) {
+			case 2:
+				game = new Game(Integer.parseInt(args[0]), Integer.parseInt(args[1]), "greenApples.txt", "redApples.txt");
+				break;
+			case 4:
+				game = new Game(Integer.parseInt(args[0]), Integer.parseInt(args[1]), args[2], args[3]);
+				break;
+			default:
+				game = new Game(1, 4545, "greenApples.txt", "redApples.txt");
+				break;
+			
 		}
-		System.out.println("done");
-//		players.add(((Player) bot0));
-//		Model model = new Model();
+		game.init();
+		game.run();
+
 
 	}
 	

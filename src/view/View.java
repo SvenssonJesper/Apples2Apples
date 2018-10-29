@@ -2,9 +2,17 @@ package view;
 
 public class View {
 	public View() {
-//		System.out.println("*****************************************************");
-//		System.out.println("**                 NEW ROUND - JUDGE               **");						
-//		System.out.println("**                    NEW ROUND                    **");		
-//		System.out.println("*****************************************************");
+
+	}
+	
+	public String newRound(boolean judge) {
+		String header = "*****************************************************";
+		if(judge) {
+			 header = header + "\n**                 NEW ROUND - JUDGE               **";
+		}else {
+			header = header + "\n**                    NEW ROUND                    **";
+		}
+		header = header + "\n*****************************************************";
+		return header;
 	}
 }
