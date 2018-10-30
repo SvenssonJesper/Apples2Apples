@@ -1,6 +1,5 @@
 package controller;
 import java.io.IOException;
-import java.util.HashMap;
 
 import cards.*;
 import model.Model;
@@ -14,7 +13,6 @@ public class Game {
 	View view;
 	int numberOfClients, port;
 	String greenDeck, redDeck;
-	HashMap<Player, String> playedCards;
 	
 	public Game(int numberOfClients,int port, String greenDeck, String redDeck) {
 		this.numberOfClients = numberOfClients;
@@ -22,7 +20,6 @@ public class Game {
 		this.greenDeck = greenDeck;
 		this.redDeck = redDeck;
 		this.view = new View();
-		this.playedCards = new HashMap<Player, String>();
 	}
 	
 	public void init() {
@@ -55,11 +52,15 @@ public class Game {
 		boolean run = true;
 		model.setJudge(model.getPlayers().get(0));
 		while(run) {
+			model.dealRedCards();
+			model.clearAllPlayedCards();
 			sendNewRound();
 			model.popGreenCard();
 			sendNewGreenCard();
 			sendHand();
-			waitForInput();
+			receivePlayedCards();
+			model.shufflePlayedCards();
+			sendPlayedCards();
 			waitForJudgeInput();
 		}
 	}
@@ -68,7 +69,7 @@ public class Game {
 		for(Player player: model.getPlayers()) {
 			if(player != model.getJudge()) {
 				try {
-					System.out.println(server.requireInput(player));
+					 System.out.println(server.requireInput(player));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -76,9 +77,16 @@ public class Game {
 		}
 	}
 	
+	private void sendPlayedCards() {
+		for(Player player: model.getPlayers()) {
+			server.sendTextToClient(player, "The following apples were played:\n" + model.getCurrentGreenCard().toString() + model.playedCardsToString());
+		}
+	}
+	
 	private void waitForJudgeInput(){
 		try {
-			System.out.println(server.requireInput(model.getJudge()));
+			int index = Integer.parseInt(server.requireInput(model.getJudge()));
+			model.addPoint(model.getPlayerThatPlayedCard(index), model.getCurrentGreenCard());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -103,7 +111,19 @@ public class Game {
 	private void sendHand() {
 		for(Player player: model.getPlayers()) {
 			if(player != model.getJudge())
-				server.sendTextToClient(player,player.getAllCardsTextInHand());
+				server.sendTextToClient(player,"Choose a red apple to play:\n" + player.getAllCardsTextInHand());
+		}
+	}
+	
+	private void receivePlayedCards() {
+		for(Player player: model.getPlayers()) {
+			if(player != model.getJudge()) {
+				try {
+					 model.playCard(player.playCard(Integer.parseInt(server.requireInput(player))), player);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

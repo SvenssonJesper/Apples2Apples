@@ -1,14 +1,11 @@
 package network;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.rmi.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class Client {
 	Socket socket;
@@ -50,8 +47,11 @@ public class Client {
 			String input = this.in.readLine();
 			switch(input) {
 				case "input": {
+					//clear the bufferedReader of old inputs
+					clearBufferedReader();
 					this.outputStream.writeBytes(readInput() + "\n");
 					this.outputStream.flush();
+					System.out.println("Waiting for other players");
 					break;
 				}
 				default:{ 
@@ -64,8 +64,11 @@ public class Client {
 	private String readInput() {
 		String input;
 		try{
-//			clearBufferedReader();
 			input = this.br.readLine();
+			if (!input.matches("-?\\d+")) {
+				System.out.println(input + " is not a number. Please input a number:");
+				input = readInput();
+			}
 		}catch(IOException er){
 			System.out.println("Bad input");
 			input = readInput();
@@ -74,10 +77,12 @@ public class Client {
 	}
 	
 	private void clearBufferedReader() throws IOException {
-		String str = null;
-		while((str = br.readLine()) != null){ 
-			  
-		}
+//		String str = null;
+//		while((str = br.readLine()) != null){ 
+//			  
+//		}
+		br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("buffer clear waiting for input");
 	}
 	
 

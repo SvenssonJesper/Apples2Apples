@@ -1,8 +1,5 @@
 package player;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 
 import cards.Card;
