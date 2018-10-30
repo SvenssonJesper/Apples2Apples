@@ -48,10 +48,11 @@ public class Game {
 	
 	
 	public void run() {
-		model.dealRedCards();
+		Player roundWinner = null;
 		boolean run = true;
-		model.setJudge(model.getPlayers().get(0));
+		model.setRandomJudge();
 		while(run) {
+//			Game flow
 			model.dealRedCards();
 			model.clearAllPlayedCards();
 			sendNewRound();
@@ -61,20 +62,29 @@ public class Game {
 			receivePlayedCards();
 			model.shufflePlayedCards();
 			sendPlayedCards();
-			waitForJudgeInput();
+			roundWinner = receiveRoundWinnerFromJudge();
+			addPoint(roundWinner);
+			sendRoundWinnerMessage(roundWinner);
+			run = !model.isWinner(roundWinner);	
+			model.setNextJudge();
+		}
+		sendWinnerMessage(roundWinner);
+	}
+	
+	private void sendWinnerMessage(Player winner) {
+		for(Player player: model.getPlayers()) {
+			server.sendTextToClient(player, view.winnerMessage(winner));
 		}
 	}
 	
-	private void waitForInput(){
+	private void sendRoundWinnerMessage(Player roundWinner) {
 		for(Player player: model.getPlayers()) {
-			if(player != model.getJudge()) {
-				try {
-					 System.out.println(server.requireInput(player));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			server.sendTextToClient(player, view.roundWinnerMessage(roundWinner, model.getCardThatPlayerPlayed(roundWinner)));
 		}
+	}
+	
+	private void addPoint(Player player) {
+		model.addPoint(player, model.getCurrentGreenCard());
 	}
 	
 	private void sendPlayedCards() {
@@ -83,13 +93,14 @@ public class Game {
 		}
 	}
 	
-	private void waitForJudgeInput(){
+	private Player receiveRoundWinnerFromJudge(){
 		try {
 			int index = Integer.parseInt(server.requireInput(model.getJudge()));
-			model.addPoint(model.getPlayerThatPlayedCard(index), model.getCurrentGreenCard());
+			return model.getPlayerThatPlayedCard(index);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	private void sendNewGreenCard() {

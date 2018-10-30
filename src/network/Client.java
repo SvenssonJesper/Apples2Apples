@@ -48,7 +48,7 @@ public class Client {
 			switch(input) {
 				case "input": {
 					//clear the bufferedReader of old inputs
-					clearBufferedReader();
+					this.br = new BufferedReader(new InputStreamReader(System.in));
 					this.outputStream.writeBytes(readInput() + "\n");
 					this.outputStream.flush();
 					System.out.println("Waiting for other players");
@@ -75,16 +75,6 @@ public class Client {
 		}
 		return input;
 	}
-	
-	private void clearBufferedReader() throws IOException {
-//		String str = null;
-//		while((str = br.readLine()) != null){ 
-//			  
-//		}
-		br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("buffer clear waiting for input");
-	}
-	
 
 }
 

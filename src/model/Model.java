@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import cards.*;
 import player.*;
@@ -10,7 +12,7 @@ public class Model {
 	private Deck<RedCard> redDeck;
 	private Deck<GreenCard> greenDeck;
 	private ArrayList<Player> players;
-	private Player judge;
+	private int judgeIndex;
 	private int maxHandSize = 7;
 	private GreenCard currentGreenCard;
 	private ArrayList<PlayedCard> playedCards;
@@ -43,12 +45,21 @@ public class Model {
 	}
 	
 	public Player getJudge() {
-		return judge;
+		return players.get(judgeIndex);
 	}
 	
-	public void setJudge(Player judge) {
-		this.judge = judge;
+	public void setRandomJudge() {
+		Random rnd = ThreadLocalRandom.current();
+		this.judgeIndex = rnd.nextInt(players.size());	
 	}
+	
+	public void setNextJudge() {
+		if(judgeIndex == (players.size() -1)) {
+			judgeIndex = 0;
+		}else {
+			judgeIndex++;
+		}
+	}	
 	
 	public GreenCard popGreenCard() {
 		currentGreenCard = (GreenCard) greenDeck.popCard();
@@ -75,6 +86,16 @@ public class Model {
 		return this.playedCards.get(index).getCard();
 	}
 	
+	public Card getCardThatPlayerPlayed(Player player) {
+		int index;
+		for(index = 0; index < playedCards.size(); index++) {
+			if (playedCards.get(index).getPlayer() == player) {
+				break;
+			}
+		}
+		return this.playedCards.get(index).getCard();
+	}
+	
 	public Player getPlayerThatPlayedCard(int index) {
 		return this.playedCards.get(index).getPlayer();
 	}
@@ -87,9 +108,31 @@ public class Model {
 		String temp = "";
 		int counter = 0;
 		for(PlayedCard playedCard:playedCards) {
-			temp = temp + "\t[" + counter + "]" + playedCard.getCard().toString() + "\n"; 
+			temp = temp + "\n\t[" + counter + "]" + playedCard.getCard().toString(); 
 			counter++;
 		}
 		return temp;
+	}
+	
+	public boolean isWinner(Player player) {
+		if (player.getPoints() >= pointsToWin()) {
+			return true;
+		}
+		return false;
+	}
+	
+	private int pointsToWin() {
+		switch(this.players.size()) {
+			case 4: 
+				return 8;
+			case 5:
+				return 7;
+			case 6:
+				return 6;
+			case 7: 
+				return 5;
+			default:
+				return 4;
+		}
 	}
 }
