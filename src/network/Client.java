@@ -53,6 +53,10 @@ public class Client {
 					this.outputStream.flush();
 					System.out.println("Waiting for other players");
 					break;
+				}case "gameFinnished": {
+					run=false;
+					System.out.println("Game finnished, closing client");
+					break;
 				}
 				default:{ 
 					System.out.println(input);

@@ -100,8 +100,7 @@ public class DeckTest {
 	public void testBotHand(){
 		DeckFactory testFac = new DeckFactory();
 		Deck<GreenCard> deck = testFac.createGreenDeck("greenApples.txt");
-		Hand hand = new Hand();
-		Bot bot = new Bot(1, hand);
+		Bot bot = new Bot(1);
 		bot.addCardToHand(deck.popCard());
 		bot.addCardToHand(deck.popCard());
 		bot.addCardToHand(deck.popCard());

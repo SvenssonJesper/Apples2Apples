@@ -9,6 +9,7 @@ public abstract class Player {
 	protected Hand hand;
 	protected ArrayList<GreenCard> points;
 	protected int id;
+	protected boolean isHuman;
 	public Player(int id) {
 		this.id = id;
 		points = new ArrayList<GreenCard>();
@@ -44,6 +45,6 @@ public abstract class Player {
 	}
 	
 	public boolean isHuman() {
-		return true;
+		return isHuman;
 	}
 }

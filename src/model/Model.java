@@ -16,12 +16,14 @@ public class Model {
 	private int maxHandSize = 7;
 	private GreenCard currentGreenCard;
 	private ArrayList<PlayedCard> playedCards;
+	private Random rnd; 
 	
 	public Model(Deck<RedCard> redDeck, Deck<GreenCard> greenDeck) {
 		this.redDeck = redDeck;
 		this.greenDeck = greenDeck;
 		this.players = new ArrayList<Player>();
 		this.playedCards = new ArrayList<PlayedCard>();
+		this.rnd = ThreadLocalRandom.current();
 	}
 	
 	public void addPlayer(Player player) {
@@ -49,7 +51,6 @@ public class Model {
 	}
 	
 	public void setRandomJudge() {
-		Random rnd = ThreadLocalRandom.current();
 		this.judgeIndex = rnd.nextInt(players.size());	
 	}
 	
@@ -96,7 +97,11 @@ public class Model {
 		return this.playedCards.get(index).getCard();
 	}
 	
-	public Player getPlayerThatPlayedCard(int index) {
+	public int getNumberOfPlayedCards() {
+		return playedCards.size();
+	}
+	
+ 	public Player getPlayerThatPlayedCard(int index) {
 		return this.playedCards.get(index).getPlayer();
 	}
 	

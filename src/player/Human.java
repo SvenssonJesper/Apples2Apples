@@ -13,6 +13,7 @@ public class Human extends Player{
 		this.connection = connection;
 		this.in = inFromClient;
 		this.outputStream = outputStream;
+		super.isHuman = true;
 	}
 	
 	public DataOutputStream getOutputStream() {
