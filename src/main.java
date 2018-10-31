@@ -1,39 +1,56 @@
 import java.io.IOException;
-import java.util.ArrayList;
-
-import com.sun.xml.internal.ws.util.StringUtils;
 
 import cards.*;
 import controller.Game;
 import model.Model;
 import network.Server;
-import player.*;
+import view.View;
 
 public class main {
 
 	public static void main(String[] args) {
-		Game game;
-//		Scuff: fixa args s� man bara kan skicka in r�tt saker.
+		String greenApplesFile = "greenApples.txt";
+		String redApplesFile = "redApples.txt";
+		int numberOfClients = 1;
+		int port = 4545;
 		switch(args.length) {
 			case 2:
-//				if(StringUtils.isNumeric(args[0]) && (Integer.parseInt(args[0]) > 0)) {
-					game = new Game(Integer.parseInt(args[0]), Integer.parseInt(args[1]), "greenApples.txt", "redApples.txt");
-			
-//				}else {
-//					System.out.println("number of clients must be a number thats larger than 0");
-//				}
-				
+				numberOfClients = Integer.parseInt(args[0]);
+				port = Integer.parseInt(args[1]);
 				break;
-			case 4:
-				game = new Game(Integer.parseInt(args[0]), Integer.parseInt(args[1]), args[2], args[3]);
+			case 4:			
+				greenApplesFile = args[2];
+				redApplesFile = args[3];
+				numberOfClients = Integer.parseInt(args[0]);
+				port = Integer.parseInt(args[1]);
 				break;
 			default:
-				game = new Game(1, 4545, "greenApples.txt", "redApples.txt");
-				break;
-			
 		}
+		View view = new View();
+		Model model = setupModel(greenApplesFile, redApplesFile);
+		Server server = startServer(numberOfClients, model, port);
+		Game game = new Game(model, view, server);
 		game.init();
 		game.run();
+	}
+	
+	private static Model setupModel(String greenDeckFile, String redDeckFile) {
+		InputFileHandeler inputHandeler = new InputFileHandeler();
+		DeckFactory testFac = new DeckFactory();
+		Deck<GreenCard> greenDeck = testFac.createGreenDeck(inputHandeler.scan(greenDeckFile));
+		greenDeck.shuffle();
+		Deck<RedCard> redDeck = testFac.createRedDeck(inputHandeler.scan(redDeckFile));
+		redDeck.shuffle();
+		return new Model(redDeck, greenDeck);
+	}
+	
+	private static Server startServer(int numberOfClients, Model model ,int port) {
+		try {
+			return new Server(numberOfClients, model, port);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

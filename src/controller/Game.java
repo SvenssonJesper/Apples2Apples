@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import cards.*;
 import model.Model;
 import network.Server;
 import view.View;
@@ -14,44 +13,18 @@ public class Game {
 	Server server;
 	Model model;
 	View view;
-	int numberOfClients, port;
-	String greenDeck, redDeck;
 	private Random rnd; 
 	private boolean run;
 	
-	public Game(int numberOfClients,int port, String greenDeck, String redDeck) {
-		this.numberOfClients = numberOfClients;
-		this.port = port;
-		this.greenDeck = greenDeck;
-		this.redDeck = redDeck;
-		this.view = new View();
+	public Game(Model model, View view, Server server) {
+		this.model = model;
+		this.view = view;
+		this.server = server;
 		this.rnd = ThreadLocalRandom.current();
 	}
 	
 	public void init() {
-		setupModel();
-		System.out.println("game initialized");
-		startServer();
 		addBots();
-	}
-	
-	
-	private void setupModel() {
-		InputFileHandeler inputHandeler = new InputFileHandeler();
-		DeckFactory testFac = new DeckFactory();
-		Deck<GreenCard> greenDeck = testFac.createGreenDeck(inputHandeler.scan(this.greenDeck));
-		greenDeck.shuffle();
-		Deck<RedCard> redDeck = testFac.createRedDeck(inputHandeler.scan(this.redDeck));
-		redDeck.shuffle();
-		this.model = new Model(redDeck, greenDeck);
-	}
-	
-	private void startServer() {
-		try {
-			this.server = new Server(this.numberOfClients, model, this.port);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void setRun(boolean run) {
