@@ -21,8 +21,9 @@ public class DeckTest {
     {
 		String filename = "greenApples.txt";
 //		create deck with DeckFactory
+		InputFileHandeler inputHandeler = new InputFileHandeler();
 		DeckFactory testFac = new DeckFactory();
-		Deck<GreenCard> deck = testFac.createGreenDeck(filename);
+		Deck<GreenCard> deck = testFac.createGreenDeck(inputHandeler.scan(filename));
 		ArrayList<String> temp = new ArrayList<String>();
 //		load all Strings from filename into list ArrayList
 		try {
@@ -48,11 +49,12 @@ public class DeckTest {
 	public void incorrectGreenFileName() {
 		String filename = "noFile.txt";
 //		create deck with DeckFactory
+		InputFileHandeler inputHandeler = new InputFileHandeler();
 		DeckFactory testFac = new DeckFactory();
 		ByteArrayInputStream in = new ByteArrayInputStream("greenApples.txt".getBytes());
 		System.setIn(in);
 		System.setIn(System.in);
-		Deck<GreenCard> deck = testFac.createGreenDeck(filename);
+		Deck<GreenCard> deck = testFac.createGreenDeck(inputHandeler.scan(filename));
 	}
 	
 	
@@ -63,8 +65,9 @@ public class DeckTest {
     {
 		String filename = "redApples.txt";
 //		create deck with DeckFactory
+		InputFileHandeler inputHandeler = new InputFileHandeler();
 		DeckFactory testFac = new DeckFactory();
-		Deck<RedCard> deck = testFac.createRedDeck(filename);
+		Deck<RedCard> deck = testFac.createRedDeck(inputHandeler.scan(filename));
 		ArrayList<String> temp = new ArrayList<String>();
 //		load all Strings from filename into list ArrayList
 		try {
@@ -87,8 +90,10 @@ public class DeckTest {
     }
 	@Test
 	public void testPopCard() {
+		String filename = "greenApples.txt";
+		InputFileHandeler inputHandeler = new InputFileHandeler();
 		DeckFactory testFac = new DeckFactory();
-		Deck<GreenCard> deck = testFac.createGreenDeck("greenApples.txt");
+		Deck<GreenCard> deck = testFac.createGreenDeck(inputHandeler.scan(filename));
 //		get first card in the green apples file
 		assertEquals("[Absurd] - (ridiculous, senseless, foolish) ", deck.popCard().toString());
 		assertEquals("[Abundant] - (plentiful, ample, numerous) ", deck.popCard().toString());
@@ -98,8 +103,10 @@ public class DeckTest {
 	
 	@Test
 	public void testBotHand(){
+		String filename = "greenApples.txt";
+		InputFileHandeler inputHandeler = new InputFileHandeler();
 		DeckFactory testFac = new DeckFactory();
-		Deck<GreenCard> deck = testFac.createGreenDeck("greenApples.txt");
+		Deck<GreenCard> deck = testFac.createGreenDeck(inputHandeler.scan(filename));
 		Bot bot = new Bot(1);
 		bot.addCardToHand(deck.popCard());
 		bot.addCardToHand(deck.popCard());

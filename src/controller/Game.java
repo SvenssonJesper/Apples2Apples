@@ -37,10 +37,11 @@ public class Game {
 	
 	
 	private void setupModel() {
+		InputFileHandeler inputHandeler = new InputFileHandeler();
 		DeckFactory testFac = new DeckFactory();
-		Deck<GreenCard> greenDeck = testFac.createGreenDeck(this.greenDeck);
+		Deck<GreenCard> greenDeck = testFac.createGreenDeck(inputHandeler.scan(this.greenDeck));
 		greenDeck.shuffle();
-		Deck<RedCard> redDeck = testFac.createRedDeck(this.redDeck);
+		Deck<RedCard> redDeck = testFac.createRedDeck(inputHandeler.scan(this.redDeck));
 		redDeck.shuffle();
 		this.model = new Model(redDeck, greenDeck);
 	}
