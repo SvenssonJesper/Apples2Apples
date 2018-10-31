@@ -1,4 +1,4 @@
-package network;
+package server;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -39,7 +39,6 @@ public class Server {
 			((Human) player).getOutputStream().writeBytes(text+"\n");
 			((Human) player).getOutputStream().flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	}
@@ -56,9 +55,3 @@ public class Server {
 		}
 	}
 }
-//
-//Hand hand = new Hand();
-//for(int i=0; i<7; i++) { //Deal 7 cards to the online Player
-//	hand.add(model.popRedCard());			
-//}
-//System.out.println(hand.toString());

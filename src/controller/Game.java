@@ -4,10 +4,10 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import model.Model;
-import network.Server;
 import view.View;
 import player.Bot;
 import player.Player;
+import server.Server;
 
 public class Game {
 	Server server;
@@ -36,11 +36,12 @@ public class Game {
 		Player roundWinner = null;
 		setRun(true);
 		model.setRandomJudge();
+		sendNameToClients();
 		while(run) {
 //			Game flow
 			model.dealRedCards();
 			model.clearAllPlayedCards();
-			sendNewRound();
+			sendNewRoundMessage();
 			model.popGreenCard();
 			sendNewGreenCard();
 			sendHand();
@@ -51,6 +52,7 @@ public class Game {
 			roundWinner = receiveRoundWinnerFromJudge();
 			addPoint(roundWinner);
 			sendRoundWinnerMessage(roundWinner);
+			sendPonitsInformation();
 			setRun(!model.isWinner(roundWinner));	
 			model.setNextJudge();
 		}
@@ -59,8 +61,25 @@ public class Game {
 		server.close();
 	}
 	
+	private void sendNameToClients() {
+		for(Player player: model.getPlayers()) {
+			if(player.isHuman()) {
+				server.sendTextToClient(player, view.nameMessage(player));
+			}
+		}
+		
+	}
+	
+	private void sendPonitsInformation() {
+		for(Player player: model.getPlayers()) {
+			if(player.isHuman()) {
+				server.sendTextToClient(player, view.sendPoints(player));
+			}
+		}
+	}
+
 	private void sendInputCommand(Player player) {
-		server.sendTextToClient(player, "input");
+		sendMessageToClients("input");
 	}
 	
 	private void addBots() {
@@ -94,7 +113,7 @@ public class Game {
 	}
 	
 	private void sendPlayedCards() {
-		sendMessageToClients("The following apples were played:\n" + model.getCurrentGreenCard().toString() + model.playedCardsToString());
+		sendMessageToClients(view.playedCardsMessage(model.getCurrentGreenCard(), model.playedCardsToString()));
 	}
 	
 	private Player receiveRoundWinnerFromJudge(){
@@ -110,10 +129,10 @@ public class Game {
 	}
 	
 	private void sendNewGreenCard() {
-		sendMessageToClients("Green apple: " + model.getCurrentGreenCard().toString());
+		sendMessageToClients(view.greenCardMessage(model.getCurrentGreenCard()));
 	}
 	
-	private void sendNewRound() {
+	private void sendNewRoundMessage() {
 		for(Player player: model.getPlayers()) {
 			if (player.isHuman()) {
 				if(player == model.getJudge())
@@ -128,7 +147,7 @@ public class Game {
 	private void sendHand() {
 		for(Player player: model.getPlayers()) {
 			if(player != model.getJudge() && player.isHuman())
-				server.sendTextToClient(player,"Choose a red apple to play:\n" + player.getAllCardsTextInHand());
+				server.sendTextToClient(player,view.sendHand(player));
 		}
 	}
 	

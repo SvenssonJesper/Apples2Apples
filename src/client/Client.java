@@ -1,4 +1,4 @@
-package network;
+package client;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -18,22 +18,6 @@ public class Client {
 		this.ip = ip;
 		this.port = port;
 		br = new BufferedReader(new InputStreamReader(System.in));
-	}
-	
-	public static void main(String[] args){
-		Client client = new Client(args[0], Integer.parseInt(args[1]));
-		try {
-			client.connect();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println("connected successfully");
-		try {
-			client.run();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		client.close();
 	}
 	
 	public void connect() throws java.net.UnknownHostException, IOException {
@@ -56,7 +40,6 @@ public class Client {
 			String input = this.in.readLine();
 			switch(input) {
 				case "input": {
-					//clear the bufferedReader of old inputs
 					this.br = new BufferedReader(new InputStreamReader(System.in));
 					this.outputStream.writeBytes(readInput() + "\n");
 					this.outputStream.flush();
