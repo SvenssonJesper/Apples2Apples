@@ -24,7 +24,7 @@ public class View {
 	}
 	
 	public String winnerMessage(Player player) {
-		return getBotOrPlayerText(player) + player.getPlayerId() + " won the game!! \nWhat a champ";
+		return getBotOrPlayerText(player) + player.getPlayerId() + " won the game!! \nCongratulations! Here is your prize: \n" + trophy();
 	}
 	
 	private String getBotOrPlayerText(Player player) {
@@ -33,5 +33,18 @@ public class View {
 		}else {
 			return "Bot ID";
 		}
+	}
+	
+	private String trophy() {
+		return			"             ___________\r\n" + 
+						"            '._==_==_=_.'\r\n" + 
+						"            .-\\:      /-.\r\n" + 
+						"           | (|:.     |) |\r\n" + 
+						"            '-|:.     |-'\r\n" + 
+						"              \\::.    /\r\n" + 
+						"               '::. .'\r\n" + 
+						"                 ) (\r\n" + 
+						"               _.' '._\r\n" + 
+						"              `\"\"\"\"\"\"\"`";
 	}
 }

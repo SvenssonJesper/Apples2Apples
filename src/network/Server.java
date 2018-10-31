@@ -44,9 +44,16 @@ public class Server {
 		}	
 	}
 	
-	public String requireInput(Player player) throws IOException {
-		sendTextToClient(player, "input");
+	public String receiveInput(Player player) throws IOException {
 		return ((Human) player).getInputStream().readLine();
+	}
+	
+	public void close() {
+		try {
+			server.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
 //

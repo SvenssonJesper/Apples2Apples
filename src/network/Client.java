@@ -33,12 +33,21 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		client.close();
 	}
 	
 	public void connect() throws java.net.UnknownHostException, IOException {
 		this.socket = new Socket(this.ip, this.port);
 		this.outputStream = new DataOutputStream(socket.getOutputStream());
 		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	}
+	
+	public void close() {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void run() throws IOException {
@@ -51,7 +60,7 @@ public class Client {
 					this.br = new BufferedReader(new InputStreamReader(System.in));
 					this.outputStream.writeBytes(readInput() + "\n");
 					this.outputStream.flush();
-					System.out.println("Waiting for other players");
+					System.out.println("Waiting for other players...");
 					break;
 				}case "gameFinnished": {
 					run=false;

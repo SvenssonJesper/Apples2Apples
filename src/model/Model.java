@@ -26,6 +26,10 @@ public class Model {
 		this.rnd = ThreadLocalRandom.current();
 	}
 	
+	public int getMaxHandSize() {
+		return maxHandSize;
+	}
+	
 	public void addPlayer(Player player) {
 		players.add(player);
 	}

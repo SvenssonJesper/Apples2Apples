@@ -17,6 +17,7 @@ public class Game {
 	int numberOfClients, port;
 	String greenDeck, redDeck;
 	private Random rnd; 
+	private boolean run;
 	
 	public Game(int numberOfClients,int port, String greenDeck, String redDeck) {
 		this.numberOfClients = numberOfClients;
@@ -52,10 +53,14 @@ public class Game {
 		}
 	}
 	
+	public void setRun(boolean run) {
+		this.run = run;
+	}
+	
 	
 	public void run() {
 		Player roundWinner = null;
-		boolean run = true;
+		setRun(true);
 		model.setRandomJudge();
 		while(run) {
 //			Game flow
@@ -72,11 +77,16 @@ public class Game {
 			roundWinner = receiveRoundWinnerFromJudge();
 			addPoint(roundWinner);
 			sendRoundWinnerMessage(roundWinner);
-			run = !model.isWinner(roundWinner);	
+			setRun(!model.isWinner(roundWinner));	
 			model.setNextJudge();
 		}
 		sendWinnerMessage(roundWinner);
-		sendCloseClientMessage();
+		sendCloseClientsCommand();
+		server.close();
+	}
+	
+	private void sendInputCommand(Player player) {
+		server.sendTextToClient(player, "input");
 	}
 	
 	private void addBots() {
@@ -85,7 +95,7 @@ public class Game {
 		}
 	}
 	
-	private void sendCloseClientMessage() {
+	private void sendCloseClientsCommand() {
 		sendMessageToClients("gameFinnished");
 	}
 	
@@ -116,17 +126,13 @@ public class Game {
 	private Player receiveRoundWinnerFromJudge(){
 		int index;
 		if(model.getJudge().isHuman()) {
-			try {
-				index = Integer.parseInt(server.requireInput(model.getJudge()));
+				sendInputCommand(model.getJudge());
+				index = receivePlayedCardIndexFromClient(model.getJudge());
 				return model.getPlayerThatPlayedCard(index);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}else {
 			index = rnd.nextInt(model.getNumberOfPlayedCards());
 			return model.getPlayerThatPlayedCard(index);
 		}
-		return null;
 	}
 	
 	private void sendNewGreenCard() {
@@ -152,14 +158,39 @@ public class Game {
 		}
 	}
 	
+	private int receivePlayedCardIndexFromClient(Player player) {
+		int cardNumber = 0;
+		try {
+			cardNumber = Integer.parseInt(server.receiveInput(player)); 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		Checks if the number that client sent was valid.
+//		Number must be larger than 0
+//		If the player is not the judge the number must be smaller than max hand size.
+//		If the player is the judge the number must be smaller than number of played cards.
+		boolean judgeCondition =  ((player == model.getJudge()) && cardNumber >= model.getNumberOfPlayedCards());
+		boolean notJudgeCondition = ((player != model.getJudge()) && cardNumber >= model.getMaxHandSize());
+		
+		if(0 > cardNumber || notJudgeCondition || judgeCondition) {
+			server.sendTextToClient(player, "Invalid input. Please choose a valid card number");
+			sendInputCommand(player);
+			cardNumber = receivePlayedCardIndexFromClient(player);
+		}
+		return cardNumber;
+	}
+	
 	private void receivePlayedCardsFromClients() {
+//		Tells clients that the should send inputs
 		for(Player player: model.getPlayers()) {
 			if(player != model.getJudge() && player.isHuman()) {
-				try {
-					 model.playCard(player.playCard(Integer.parseInt(server.requireInput(player))), player);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				sendInputCommand(player);
+			}
+		}
+//		reads the client inputs
+		for(Player player: model.getPlayers()) {
+			if(player != model.getJudge() && player.isHuman()) {
+				model.playCard(player.playCard(receivePlayedCardIndexFromClient(player)), player);
 			}
 		}
 	}
