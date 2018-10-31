@@ -15,9 +15,13 @@ public class main {
 		int port = 4545;
 		switch(args.length) {
 			case 2:
-				numberOfClients = Integer.parseInt(args[0]);
-				port = Integer.parseInt(args[1]);
-				break;
+				if (args[0].matches("-?\\d+") && args[1].matches("-?\\d+")) {
+					numberOfClients = Integer.parseInt(args[0]);
+					port = Integer.parseInt(args[1]);
+					break;
+				}else {
+					System.out.println("The input must be integers larger than 0");
+				}
 			case 4:			
 				greenApplesFile = args[2];
 				redApplesFile = args[3];
@@ -25,6 +29,7 @@ public class main {
 				port = Integer.parseInt(args[1]);
 				break;
 			default:
+				System.out.println("Starting server with default parameters");
 		}
 		View view = new View();
 		Model model = setupModel(greenApplesFile, redApplesFile);
