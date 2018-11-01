@@ -9,6 +9,12 @@ import player.Bot;
 import player.Player;
 import server.Server;
 
+/**
+ * Game acts as a controller. Game uses model ,view and server.
+* @author Jesper Svensson
+*
+*/
+
 public class Game {
 	Server server;
 	Model model;
@@ -22,16 +28,24 @@ public class Game {
 		this.server = server;
 		this.rnd = ThreadLocalRandom.current();
 	}
-	
+	/**
+	 * Initialize the game
+	 */
 	public void init() {
 		addBots();
 	}
-	
+	/**
+	 * Sets the run variable
+	 * @param run the boolean that run should have.
+	 */
 	public void setRun(boolean run) {
 		this.run = run;
 	}
 	
-	
+	/**
+	 * The game loop which follows the game flow.
+	 * This function follows the game flow of Apples 2 Apples.
+	 */
 	public void run() {
 		Player roundWinner = null;
 		setRun(true);

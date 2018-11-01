@@ -8,13 +8,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Handles scanning of text files.
+ * @author Jesper Svensson
+ *
+ */
+
 public class InputFileHandeler {
 
 	public InputFileHandeler() {
 
 	}		 
 		/**
- 		 * Scanns a textfile and return the content in an ArrayList.
+ 		 * Scans a textfile and return the content in an ArrayList.
  		 * Each line becomes an element.
 		 *
 		 * @param  textfile  a file that contains Strings that represents cards 

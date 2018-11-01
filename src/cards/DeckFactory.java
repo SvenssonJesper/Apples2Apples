@@ -1,5 +1,11 @@
 package cards;
 
+/**
+* Help object for creating decks.
+* @author Jesper Svensson
+*
+*/
+
 import java.util.ArrayList;
 
 public class DeckFactory {

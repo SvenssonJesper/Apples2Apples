@@ -7,8 +7,18 @@ import model.Model;
 import server.Server;
 import view.View;
 
+/**
+* This file starts the Server
+* @author Jesper Svensson
+*
+*/
+
 public class ServerMain {
 
+	/**
+	 * Main function for running server.
+	 * @param args contains number of clients, port number, green apples file name and red apples file name. If not they will be set to default.
+	 */
 	public static void main(String[] args) {
 //		Default options that will be set if no arguments are provided.
 		String greenApplesFile = "greenApples.txt";
@@ -52,24 +62,27 @@ public class ServerMain {
 		game.run();
 	}
 	
-	
+	//Creates the model with two shuffled decks.
 	private static Model setupModel(String greenDeckFile, String redDeckFile) {
 		InputFileHandeler inputHandeler = new InputFileHandeler();
-		DeckFactory testFac = new DeckFactory();
-		Deck<GreenCard> greenDeck = testFac.createGreenDeck(inputHandeler.scan(greenDeckFile));
+		DeckFactory deckFactory = new DeckFactory();
+		Deck<GreenCard> greenDeck = deckFactory.createGreenDeck(inputHandeler.scan(greenDeckFile));
 		greenDeck.shuffle();
-		Deck<RedCard> redDeck = testFac.createRedDeck(inputHandeler.scan(redDeckFile));
+		Deck<RedCard> redDeck = deckFactory.createRedDeck(inputHandeler.scan(redDeckFile));
 		redDeck.shuffle();
 		return new Model(redDeck, greenDeck);
 	}
 	
+	//Starts the server with the amount of clients and the port number provided.
 	private static Server startServer(int numberOfClients, Model model ,int port) {
+		Server server = null;
 		try {
-			return new Server(numberOfClients, model, port);
+			server = new Server(numberOfClients, model, port);
+			server.connectToClients();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return server;
 	}
 	
 }

@@ -8,6 +8,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import cards.*;
 import player.*;
 
+/**
+* The model holds the state of the game and functions to update the state.
+* @author Jesper Svensson
+*
+*/
+
 public class Model {
 	private Deck<RedCard> redDeck;
 	private Deck<GreenCard> greenDeck;
@@ -17,7 +23,11 @@ public class Model {
 	private GreenCard currentGreenCard;
 	private ArrayList<PlayedCard> playedCards;
 	private Random rnd; 
-	
+	/**
+	 * Constructor of Model
+	 * @param redDeck a Deck of RedCards.
+	 * @param greenDeck a Deck of GreenCards. 
+	 */
 	public Model(Deck<RedCard> redDeck, Deck<GreenCard> greenDeck) {
 		this.redDeck = redDeck;
 		this.greenDeck = greenDeck;
@@ -29,7 +39,10 @@ public class Model {
 	public int getMaxHandSize() {
 		return maxHandSize;
 	}
-	
+	/**
+	 * Adds players to the state.
+	 * @param player the player that should be added.
+	 */
 	public void addPlayer(Player player) {
 		players.add(player);
 	}
@@ -41,7 +54,9 @@ public class Model {
 	public ArrayList<Player> getPlayers(){
 		return this.players;
 	}
-	
+	/**
+	 * Deal red cards to all players until the have cards equals to the maximum number of cards a hand should have.
+	 */
 	public void dealRedCards() {
 		for(Player player:this.players) {
 			while(player.getHandSize() < this.maxHandSize) {
@@ -53,11 +68,15 @@ public class Model {
 	public Player getJudge() {
 		return players.get(judgeIndex);
 	}
-	
+	/**
+	 * Sets Judge to a random player
+	 */
 	public void setRandomJudge() {
 		this.judgeIndex = rnd.nextInt(players.size());	
 	}
-	
+	/**
+	 * Sets Judge to next player in line.
+	 */
 	public void setNextJudge() {
 		if(judgeIndex == (players.size() -1)) {
 			judgeIndex = 0;
@@ -90,7 +109,11 @@ public class Model {
 	public Card getPlayedCard(int index) {
 		return this.playedCards.get(index).getCard();
 	}
-	
+	/**
+	 * 
+	 * @param player
+	 * @return the card that player played
+	 */
 	public Card getCardThatPlayerPlayed(Player player) {
 		int index;
 		for(index = 0; index < playedCards.size(); index++) {
@@ -112,7 +135,10 @@ public class Model {
 	public void clearAllPlayedCards() {
 		this.playedCards.clear();
 	}
-	
+	/**
+	 * Concatenates all the played cards toString into one
+	 * @return a string with index and text to each card in playedCards. The cards are separated with a new line. 
+	 */
 	public String playedCardsToString() {
 		String temp = "";
 		int counter = 0;
@@ -122,7 +148,11 @@ public class Model {
 		}
 		return temp;
 	}
-	
+	/**
+	 * Checks if player has enough points to win.
+	 * @param player
+	 * @return true if the player won, otherwise false.
+	 */
 	public boolean isWinner(Player player) {
 		if (player.getPoints() >= pointsToWin()) {
 			return true;

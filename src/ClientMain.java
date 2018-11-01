@@ -2,7 +2,18 @@ import java.io.IOException;
 
 import client.Client;
 
+/**
+* This file starts the client.
+* @author Jesper Svensson
+*
+*/
+
 public class ClientMain {
+	
+	/**
+	 * Main function for running client.
+	 * @param args contains ip and port number to server
+	 */
 	public static void main(String[] args){
 		Client client = new Client(args[0], Integer.parseInt(args[1]));
 		try {
