@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Client.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">.</a> &gt; <a href="index.source.html" class="el_package">client</a> &gt; <span class="el_source">Client.java</span></div><h1>Client.java</h1><pre class="source lang-java linenums">package client;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+/**
+ * The Client side of the game.
+* @author Jesper Svensson
+*
+*/
+public class Client {
+	Socket socket;
+	DataOutputStream outputStream;
+	BufferedReader in, br;
+	String ip;
+	int port;
+	/**
+	 * Constructor of client
+	 * @param ip the ip-address of the server that you want to connect to.
+	 * @param port the port number the server send data on. 
+	 */
+<span class="fc" id="L25">	public Client(String ip, int port){</span>
+<span class="fc" id="L26">		this.ip = ip;</span>
+<span class="fc" id="L27">		this.port = port;</span>
+<span class="fc" id="L28">		br = new BufferedReader(new InputStreamReader(System.in));</span>
+<span class="fc" id="L29">	}</span>
+	/**
+	 * Connects the client to the provided ip-address and port
+	 * @throws java.net.UnknownHostException if there is no server running on this port 
+	 * @throws IOException if the ip-address or the port is invalid.
+	 */
+	public void connect() throws java.net.UnknownHostException, IOException {
+<span class="fc" id="L36">		this.socket = new Socket(this.ip, this.port);</span>
+<span class="fc" id="L37">		this.outputStream = new DataOutputStream(socket.getOutputStream());</span>
+<span class="fc" id="L38">		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));</span>
+<span class="fc" id="L39">	}</span>
+	/**
+	 * Closes the clients socket
+	 */
+	public void close() {
+		try {
+<span class="nc" id="L45">			socket.close();</span>
+<span class="nc" id="L46">		} catch (IOException e) {</span>
+<span class="nc" id="L47">			e.printStackTrace();</span>
+<span class="nc" id="L48">		}</span>
+<span class="nc" id="L49">	}</span>
+	/**
+	 * Runs the game on client side.
+	 * @throws IOException if the client is not connected to the server.
+	 */
+	public void run() throws IOException {
+<span class="nc" id="L55">		boolean run = true;</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		while (run){</span>
+<span class="nc" id="L57">			String input = this.in.readLine();</span>
+<span class="nc bnc" id="L58" title="All 10 branches missed.">			switch(input) {</span>
+				case &quot;input&quot;: {
+<span class="nc" id="L60">					this.br = new BufferedReader(new InputStreamReader(System.in));</span>
+<span class="nc" id="L61">					this.outputStream.writeBytes(readInput() + &quot;\n&quot;);</span>
+<span class="nc" id="L62">					this.outputStream.flush();</span>
+<span class="nc" id="L63">					System.out.println(&quot;Waiting for other players...&quot;);</span>
+<span class="nc" id="L64">					break;</span>
+				}case &quot;gameFinnished&quot;: {
+<span class="nc" id="L66">					run=false;</span>
+<span class="nc" id="L67">					System.out.println(&quot;Game finnished, closing client&quot;);</span>
+<span class="nc" id="L68">					break;</span>
+				}
+				default:{ 
+<span class="nc" id="L71">					System.out.println(input);</span>
+				}
+			}
+<span class="nc" id="L74">		}</span>
+<span class="nc" id="L75">	}</span>
+	
+	private String readInput() {
+		String input;
+		try{
+<span class="nc" id="L80">			input = this.br.readLine();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">			if (!input.matches(&quot;-?\\d+&quot;)) {</span>
+<span class="nc" id="L82">				System.out.println(input + &quot; is not a number. Please input a number:&quot;);</span>
+<span class="nc" id="L83">				input = readInput();</span>
+			}
+<span class="nc" id="L85">		}catch(IOException er){</span>
+<span class="nc" id="L86">			System.out.println(&quot;Bad input&quot;);</span>
+<span class="nc" id="L87">			input = readInput();</span>
+<span class="nc" id="L88">		}</span>
+<span class="nc" id="L89">		return input;</span>
+	}
+
+}
+
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

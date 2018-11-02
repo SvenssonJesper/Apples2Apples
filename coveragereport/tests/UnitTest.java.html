@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnitTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">.</a> &gt; <a href="index.source.html" class="el_package">tests</a> &gt; <span class="el_source">UnitTest.java</span></div><h1>UnitTest.java</h1><pre class="source lang-java linenums">package tests;
+
+import static org.junit.Assert.assertEquals;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import org.junit.Test;
+
+import cards.*;
+import client.Client;
+import controller.Game;
+import input.InputFileHandeler;
+import model.Model;
+import player.*;
+import server.Server;
+import view.View;
+
+
+<span class="fc" id="L24">public class UnitTest {</span>
+	
+	@Test
+    public void createGreenDeck()
+    {
+<span class="fc" id="L29">		String filename = &quot;greenApples.txt&quot;;</span>
+//		create deck with DeckFactory
+<span class="fc" id="L31">		InputFileHandeler inputHandeler = new InputFileHandeler();</span>
+<span class="fc" id="L32">		DeckFactory testFac = new DeckFactory();</span>
+<span class="fc" id="L33">		Deck&lt;GreenCard&gt; deck = testFac.createGreenDeck(inputHandeler.scan(filename));</span>
+<span class="fc" id="L34">		ArrayList&lt;String&gt; temp = new ArrayList&lt;String&gt;();</span>
+//		load all Strings from filename into list ArrayList
+		try {
+<span class="fc" id="L37">			File file = new File(filename);				</span>
+<span class="fc" id="L38">	        Scanner sc = new Scanner(file);</span>
+	        
+<span class="fc bfc" id="L40" title="All 2 branches covered.">	        while (sc.hasNextLine()) {</span>
+<span class="fc" id="L41">	            temp.add(sc.nextLine());</span>
+	        }
+<span class="fc" id="L43">	        sc.close();</span>
+	    } 
+<span class="nc" id="L45">	    catch (FileNotFoundException e) {</span>
+<span class="nc" id="L46">	    	e.printStackTrace();</span>
+<span class="fc" id="L47">	    }</span>
+		
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">		int lenght = (temp.size()&gt;deck.size())?deck.size():temp.size();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		for(int i = 0; i &lt; lenght; i++) {</span>
+<span class="fc" id="L51">			assertEquals(temp.get(i), deck.popCard().toString());</span>
+		}
+<span class="fc" id="L53">    }</span>
+	
+	@Test
+	public void incorrectGreenFileName() {
+<span class="fc" id="L57">		String filename = &quot;noFile.txt&quot;;</span>
+//		create deck with DeckFactory
+<span class="fc" id="L59">		InputFileHandeler inputHandeler = new InputFileHandeler();</span>
+<span class="fc" id="L60">		DeckFactory testFac = new DeckFactory();</span>
+<span class="fc" id="L61">		ByteArrayInputStream in = new ByteArrayInputStream(&quot;greenApples.txt&quot;.getBytes());</span>
+<span class="fc" id="L62">		System.setIn(in);</span>
+<span class="fc" id="L63">		System.setIn(System.in);</span>
+<span class="fc" id="L64">		Deck&lt;GreenCard&gt; deck = testFac.createGreenDeck(inputHandeler.scan(filename));</span>
+<span class="fc" id="L65">	}</span>
+	
+	
+
+	
+	@Test
+    public void createRedDeck()
+    {
+<span class="fc" id="L73">		String filename = &quot;redApples.txt&quot;;</span>
+//		create deck with DeckFactory
+<span class="fc" id="L75">		InputFileHandeler inputHandeler = new InputFileHandeler();</span>
+<span class="fc" id="L76">		DeckFactory testFac = new DeckFactory();</span>
+<span class="fc" id="L77">		Deck&lt;RedCard&gt; deck = testFac.createRedDeck(inputHandeler.scan(filename));</span>
+<span class="fc" id="L78">		ArrayList&lt;String&gt; temp = new ArrayList&lt;String&gt;();</span>
+//		load all Strings from filename into list ArrayList
+		try {
+<span class="fc" id="L81">			File file = new File(filename);				</span>
+<span class="fc" id="L82">	        Scanner sc = new Scanner(file);</span>
+	        
+<span class="fc bfc" id="L84" title="All 2 branches covered.">	        while (sc.hasNextLine()) {</span>
+<span class="fc" id="L85">	            temp.add(sc.nextLine());</span>
+	        }
+<span class="fc" id="L87">	        sc.close();</span>
+	    } 
+<span class="nc" id="L89">	    catch (FileNotFoundException e) {</span>
+<span class="nc" id="L90">	    	e.printStackTrace();</span>
+<span class="fc" id="L91">	    }</span>
+		
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">		int lenght = (temp.size()&gt;deck.size())?deck.size():temp.size();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">		for(int i = 0; i &lt; lenght; i++) {</span>
+<span class="fc" id="L95">			assertEquals(temp.get(i), deck.popCard().toString());</span>
+		}
+<span class="fc" id="L97">    }</span>
+	@Test
+	public void testPopCard() {
+<span class="fc" id="L100">		String filename = &quot;greenApples.txt&quot;;</span>
+<span class="fc" id="L101">		InputFileHandeler inputHandeler = new InputFileHandeler();</span>
+<span class="fc" id="L102">		DeckFactory testFac = new DeckFactory();</span>
+<span class="fc" id="L103">		Deck&lt;GreenCard&gt; deck = testFac.createGreenDeck(inputHandeler.scan(filename));</span>
+//		get first card in the green apples file
+<span class="fc" id="L105">		assertEquals(&quot;[Absurd] - (ridiculous, senseless, foolish) &quot;, deck.popCard().toString());</span>
+<span class="fc" id="L106">		assertEquals(&quot;[Abundant] - (plentiful, ample, numerous) &quot;, deck.popCard().toString());</span>
+<span class="fc" id="L107">		assertEquals(&quot;[Addictive] - (obsessive, consuming, captivating) &quot;, deck.popCard().toString());</span>
+		
+<span class="fc" id="L109">	}</span>
+	
+	@Test
+	public void testBotHand(){
+<span class="fc" id="L113">		String filename = &quot;greenApples.txt&quot;;</span>
+<span class="fc" id="L114">		InputFileHandeler inputHandeler = new InputFileHandeler();</span>
+<span class="fc" id="L115">		DeckFactory testFac = new DeckFactory();</span>
+<span class="fc" id="L116">		Deck&lt;GreenCard&gt; deck = testFac.createGreenDeck(inputHandeler.scan(filename));</span>
+<span class="fc" id="L117">		Bot bot = new Bot(1);</span>
+<span class="fc" id="L118">		bot.addCardToHand(deck.popCard());</span>
+<span class="fc" id="L119">		bot.addCardToHand(deck.popCard());</span>
+<span class="fc" id="L120">		bot.addCardToHand(deck.popCard());</span>
+<span class="fc" id="L121">		assertEquals(&quot;[Addictive] - (obsessive, consuming, captivating) &quot;, bot.playCard(2).toString());</span>
+<span class="fc" id="L122">	}</span>
+	
+	@Test
+	public void dealCards() {
+<span class="fc" id="L126">		Model model = setupModel(&quot;greenApples.txt&quot;, &quot;redApples.txt&quot;);</span>
+		//adds 10 bots
+<span class="fc bfc" id="L128" title="All 2 branches covered.">		for(int i = 0; i &lt;10; i++) {</span>
+<span class="fc" id="L129">			model.addPlayer(new Bot(i));</span>
+		}
+		//deals cards to players
+<span class="fc" id="L132">		model.dealRedCards();</span>
+		//goes through all players and compare models max hand size and players hand size
+<span class="fc bfc" id="L134" title="All 2 branches covered.">		for(Player player:model.getPlayers()) {</span>
+<span class="fc" id="L135">			assertEquals(model.getMaxHandSize(),player.getHandSize());</span>
+<span class="fc" id="L136">		}</span>
+<span class="fc" id="L137">	}</span>
+	
+	@Test
+	public void refillHandOfPlayers() {
+<span class="fc" id="L141">		Model model = setupModel(&quot;greenApples.txt&quot;, &quot;redApples.txt&quot;);</span>
+		//adds 10 bots
+<span class="fc bfc" id="L143" title="All 2 branches covered.">		for(int i = 0; i &lt;10; i++) {</span>
+<span class="fc" id="L144">			model.addPlayer(new Bot(i));</span>
+		}
+		//deals cards to players
+<span class="fc" id="L147">		model.dealRedCards();</span>
+		//Makes every player play two cards
+<span class="fc bfc" id="L149" title="All 2 branches covered.">		for(Player player:model.getPlayers()) {</span>
+<span class="fc" id="L150">			player.playCard(0);</span>
+<span class="fc" id="L151">			player.playCard(0);</span>
+<span class="fc" id="L152">		}</span>
+		//checks if players have 2 less cards than max hand size
+<span class="fc bfc" id="L154" title="All 2 branches covered.">		for(Player player:model.getPlayers()) {</span>
+<span class="fc" id="L155">			assertEquals(model.getMaxHandSize()-2,player.getHandSize());</span>
+<span class="fc" id="L156">		}</span>
+		//deals new cards to players
+<span class="fc" id="L158">		model.dealRedCards();</span>
+		//goes through all players and compare models max hand size and players hand size
+<span class="fc bfc" id="L160" title="All 2 branches covered.">		for(Player player:model.getPlayers()) {</span>
+<span class="fc" id="L161">			assertEquals(model.getMaxHandSize(),player.getHandSize());</span>
+<span class="fc" id="L162">		}</span>
+<span class="fc" id="L163">	}</span>
+	
+	@Test
+	public void runGameWithBots() {
+<span class="fc" id="L167">		View view = new View();</span>
+<span class="fc" id="L168">		Model model = setupModel(&quot;greenApples.txt&quot;, &quot;redApples.txt&quot;);</span>
+<span class="fc" id="L169">		Server server = null;</span>
+		try {
+<span class="fc" id="L171">			server = new Server(0, model, 4545);</span>
+<span class="nc" id="L172">		} catch (IOException e) {</span>
+<span class="nc" id="L173">			e.printStackTrace();</span>
+<span class="fc" id="L174">		}</span>
+<span class="fc" id="L175">		Game game = new Game(model, view, server);</span>
+<span class="fc" id="L176">		game.init();</span>
+<span class="fc" id="L177">		game.run();</span>
+<span class="fc" id="L178">	}</span>
+	
+	@Test
+	public void isWinnerWith4Players() {
+<span class="fc" id="L182">		Model model = setupModel(&quot;greenApples.txt&quot;, &quot;redApples.txt&quot;);</span>
+		//add 4 bots
+<span class="fc" id="L184">		Bot bot = new Bot(0);</span>
+<span class="fc" id="L185">		model.addPlayer(bot);</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">		for(int i = 1; i &lt; 4; i++) {</span>
+<span class="fc" id="L187">			model.addPlayer(new Bot(i));</span>
+		}
+
+		//add points to bot, should have 8 points after loop
+<span class="fc bfc" id="L191" title="All 2 branches covered.">		for(int i = 0; i &lt;8; i++) {</span>
+			//checks if bot is winner. Checks 0-7 which should return false
+<span class="fc" id="L193">			assertEquals(false,model.isWinner(bot));</span>
+<span class="fc" id="L194">			model.addPoint(bot, model.popGreenCard());</span>
+		}
+		//checks if bot is winner after the loop when bot has 8 points
+<span class="fc" id="L197">		assertEquals(true,model.isWinner(bot));</span>
+<span class="fc" id="L198">	}</span>
+	
+	@Test
+	public void isWinnerWith6Players() {
+<span class="fc" id="L202">		Model model = setupModel(&quot;greenApples.txt&quot;, &quot;redApples.txt&quot;);</span>
+		//add 6 bots
+<span class="fc" id="L204">		Bot bot = new Bot(0);</span>
+<span class="fc" id="L205">		model.addPlayer(bot);</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">		for(int i = 1; i &lt; 6; i++) {</span>
+<span class="fc" id="L207">			model.addPlayer(new Bot(i));</span>
+		}
+
+		//add points to bot, should have 6 points after loop
+<span class="fc bfc" id="L211" title="All 2 branches covered.">		for(int i = 0; i &lt;6; i++) {</span>
+			//checks if bot is winner. Checks 0-5 which should return false
+<span class="fc" id="L213">			assertEquals(false,model.isWinner(bot));</span>
+<span class="fc" id="L214">			model.addPoint(bot, model.popGreenCard());</span>
+		}
+		//checks if bot is winner after the loop when bot has 6 points
+<span class="fc" id="L217">		assertEquals(true,model.isWinner(bot));</span>
+<span class="fc" id="L218">	}</span>
+	
+
+	@Test
+	public void setUpServerAndConnectClients() throws IOException {
+<span class="fc" id="L223">		int port = 4545;</span>
+<span class="fc" id="L224">		String localhost = &quot;127.0.0.1&quot;;</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">		for(int numberOfClients = 1; numberOfClients&lt;8; numberOfClients ++) {</span>
+<span class="fc" id="L226">			View view = new View();</span>
+<span class="fc" id="L227">			Model model = setupModel(&quot;greenApples.txt&quot;, &quot;redApples.txt&quot;);</span>
+<span class="fc" id="L228">			Server server = new Server(numberOfClients, model, port);</span>
+			//connecting clients.		
+<span class="fc bfc" id="L230" title="All 2 branches covered.">			for(int i = 0; i &lt; numberOfClients; i++) {			</span>
+<span class="fc" id="L231">				new Client(localhost,port).connect();			</span>
+			}
+<span class="fc" id="L233">			server.connectToClients();</span>
+			
+<span class="fc" id="L235">			Game game = new Game(model, view, server);</span>
+<span class="fc" id="L236">			game.init();</span>
+<span class="fc" id="L237">			server.close();</span>
+		}
+<span class="fc" id="L239">	}</span>
+	
+
+	private Model setupModel(String greenDeckFile, String redDeckFile) {
+<span class="fc" id="L243">		InputFileHandeler inputHandeler = new InputFileHandeler();</span>
+<span class="fc" id="L244">		DeckFactory testFac = new DeckFactory();</span>
+<span class="fc" id="L245">		Deck&lt;GreenCard&gt; greenDeck = testFac.createGreenDeck(inputHandeler.scan(greenDeckFile));</span>
+<span class="fc" id="L246">		greenDeck.shuffle();</span>
+<span class="fc" id="L247">		Deck&lt;RedCard&gt; redDeck = testFac.createRedDeck(inputHandeler.scan(redDeckFile));</span>
+<span class="fc" id="L248">		redDeck.shuffle();</span>
+<span class="fc" id="L249">		return new Model(redDeck, greenDeck);</span>
+	}
+}
+
+
+
+//@Test
+//public void runGameWithOneClient() throws IOException {
+//	int port = 4545;
+//	String localhost = &quot;127.0.0.1&quot;;
+//	View view = new View();
+//	Model model = setupModel(&quot;greenApples.txt&quot;, &quot;redApples.txt&quot;);
+//	Server server = new Server(1, model, port);
+//	//connecting client.		
+//	Client client = new Client(localhost,port);
+//	client.connect();
+//	server.connectToClients();
+//	Game game = new Game(model, view, server);
+//	game.init();
+//	//Thread here to simulate game.
+////	game.run();
+////	client.run();
+//	}
+//}
+
+//Test with Thread not working atm.
+
+//@Test
+//public void incorrectRedFileName() {
+//	String filename = &quot;noFile.txt&quot;;
+////	create deck with DeckFactory
+//	DeckFactory testFac = new DeckFactory();
+//	
+//	final Thread createDeck = new Thread(new Runnable() {
+//
+//		public void run(){
+//			String filename = &quot;noFile.txt&quot;;
+////			create deck with DeckFactory
+//			DeckFactory testFac = new DeckFactory();
+//			 Deck&lt;RedCard&gt; deck = testFac.createRedDeck(filename);
+//		}
+//	 });
+//	final Thread generateInput = new Thread(new Runnable() {
+//			public void run(){			
+//				ByteArrayInputStream in = new ByteArrayInputStream(&quot;greenApples.txt&quot;.getBytes());
+//				System.setIn(in);
+//				System.setIn(System.in);
+//		  }
+//		});
+//	
+//	for(int i = 0; i &lt; 10; i++) {
+//		createDeck.start();
+//		generateInput.start();
+////		try {
+////			createDeck.sleep(100);
+////		} catch (InterruptedException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+////		try {
+////			generateInput.sleep(100);
+////		} catch (InterruptedException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+//	}
+//}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

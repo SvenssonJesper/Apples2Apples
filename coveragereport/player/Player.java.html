@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">.</a> &gt; <a href="index.source.html" class="el_package">player</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package player;
+
+import java.util.ArrayList;
+
+import cards.Card;
+import cards.GreenCard;
+
+/**
+ * Abstract class for creating players.
+ * @author Jesper Svensson
+ *
+ */
+
+public abstract class Player {
+	protected Hand hand;
+	protected ArrayList&lt;GreenCard&gt; points;
+	protected int id;
+	protected boolean isHuman;
+<span class="fc" id="L19">	public Player(int id) {</span>
+<span class="fc" id="L20">		this.id = id;</span>
+<span class="fc" id="L21">		points = new ArrayList&lt;GreenCard&gt;();</span>
+<span class="fc" id="L22">		this.hand = new Hand();</span>
+<span class="fc" id="L23">	}</span>
+	/**
+	 * adds the provided card to the players hand.
+	 * @param card the card that should be added to hand.
+	 */
+	public void addCardToHand(Card card) {
+<span class="fc" id="L29">		this.hand.add(card);</span>
+<span class="fc" id="L30">	}</span>
+	/**
+	 * Removes the card with index index from the players hand and returns the card.
+	 * @param index of the card you want to play from the players hand.
+	 * @return the card that was played.
+	 */
+	
+	public Card playCard(int index) {
+<span class="fc" id="L38">		return this.hand.playCard(index);</span>
+	}
+	
+	public int getHandSize() {
+<span class="fc" id="L42">		return this.hand.getSize();</span>
+	}
+	
+	public void addPoint(GreenCard card) {
+<span class="fc" id="L46">		this.points.add(card);</span>
+<span class="fc" id="L47">	}</span>
+	
+	public int getPoints() {
+<span class="fc" id="L50">		return this.points.size();</span>
+	}
+	
+	public int getPlayerId() {
+<span class="fc" id="L54">		return this.id;</span>
+	}
+	/**
+	 * 
+	 * @return a string with index and text to each card in hand. The cards are separated with a new line. 
+	 */
+	public String getAllCardsTextInHand(){
+<span class="nc" id="L61">		return this.hand.toString();</span>
+	}
+	
+	public boolean isHuman() {
+<span class="fc" id="L65">		return isHuman;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

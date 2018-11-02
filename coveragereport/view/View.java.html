@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>View.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">.</a> &gt; <a href="index.source.html" class="el_package">view</a> &gt; <span class="el_source">View.java</span></div><h1>View.java</h1><pre class="source lang-java linenums">package view;
+
+import cards.Card;
+import cards.GreenCard;
+import player.Player;
+
+/**
+ * The view returns processed Strings to send to clients.
+ * @author Jesper Svensson
+ *
+ */
+
+public class View {
+	/**
+	 * Constructor of View. The view handles all Strings that should be sent to the clients.
+	 */
+<span class="fc" id="L17">	public View() {</span>
+
+<span class="fc" id="L19">	}</span>
+	/**
+	 * 
+	 * @param judge notes if the message should be for the judge or not.
+	 * @return the new round visuals message as a String.
+	 */
+	public String newRound(boolean judge) {
+<span class="nc" id="L26">		String header = &quot;*****************************************************&quot;;</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		if(judge) {</span>
+<span class="nc" id="L28">			 header = header + &quot;\n**                 NEW ROUND - JUDGE               **&quot;;</span>
+		}else {
+<span class="nc" id="L30">			header = header + &quot;\n**                    NEW ROUND                    **&quot;;</span>
+		}
+<span class="nc" id="L32">		header = header + &quot;\n*****************************************************&quot;;</span>
+<span class="nc" id="L33">		return header;</span>
+	}
+	/**
+	 * 
+	 * @param roundWinner the player that won the round.
+	 * @param card the card the player won with.
+	 * @return the message that should be sent to clients as a String.
+	 */
+	public String roundWinnerMessage(Player roundWinner, Card card) {
+<span class="fc" id="L42">		return getBotOrPlayerText(roundWinner) + roundWinner.getPlayerId() + &quot; won with: &quot; + card.toString();</span>
+	}
+	/**
+	 * 
+	 * @param winner the player that won the game.
+	 * @return a winner message as a String.
+	 */
+	public String winnerMessage(Player winner) {
+<span class="fc" id="L50">		return getBotOrPlayerText(winner) + winner.getPlayerId() + &quot; won the game!! \nCongratulations! \nHere is &quot; +</span>
+<span class="fc" id="L51">				getBotOrPlayerText(winner) + winner.getPlayerId() + &quot;s prize: \n&quot; + trophy();</span>
+	}
+	
+	public String nameMessage(Player player) {
+<span class="nc" id="L55">		return &quot;You are Player ID&quot; + player.getPlayerId();</span>
+	}
+	
+	public String greenCardMessage(GreenCard greenCard) {
+<span class="fc" id="L59">		return &quot;Green apple: &quot; + greenCard.toString();</span>
+	}
+	
+	public String playedCardsMessage(GreenCard currentGreenCard, String playedCardsToString) {
+<span class="fc" id="L63">		return &quot;The following apples were played:\n&quot; + currentGreenCard.toString() + playedCardsToString;</span>
+		
+	}
+	/**
+	 * 
+	 * @param player that should receive the hand.
+	 * @return the hand of the player as String.
+	 */
+	public String sendHand(Player player) {
+<span class="nc" id="L72">		return &quot;Choose a red apple to play:\n&quot; + player.getAllCardsTextInHand();</span>
+	}
+	
+	private String getBotOrPlayerText(Player player) {
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">		if(player.isHuman()) {</span>
+<span class="nc" id="L77">			return &quot;Player ID&quot;;</span>
+		}else {
+<span class="fc" id="L79">			return &quot;Bot ID&quot;;</span>
+		}
+	}
+	
+	private String trophy() {
+<span class="fc" id="L84">		return			&quot;             ___________\r\n&quot; + </span>
+						&quot;            '._==_==_=_.'\r\n&quot; + 
+						&quot;            .-\\:      /-.\r\n&quot; + 
+						&quot;           | (|:.     |) |\r\n&quot; + 
+						&quot;            '-|:.     |-'\r\n&quot; + 
+						&quot;              \\::.    /\r\n&quot; + 
+						&quot;               '::. .'\r\n&quot; + 
+						&quot;                 ) (\r\n&quot; + 
+						&quot;               _.' '._\r\n&quot; + 
+						&quot;              `\&quot;\&quot;\&quot;\&quot;\&quot;\&quot;\&quot;`&quot;;
+	}
+	/**
+	 *
+	 * @param player that you want to send the points to
+	 * @return a message with the points in as a String.
+	 */
+	public String sendPoints(Player player) {
+<span class="nc" id="L101">		return &quot;You have &quot; + player.getPoints() + &quot; points.&quot;;</span>
+	}
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

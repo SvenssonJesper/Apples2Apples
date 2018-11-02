@@ -29,8 +29,7 @@ public class ServerMain {
 		switch(args.length) {
 			case 2:
 //				Checks that the input is numbers larger than 0 if they are use them, otherwise use the default options
-				if (args[0].matches("-?\\d+") && args[1].matches("-?\\d+")
-					&& Integer.parseInt(args[0]) > 0 && Integer.parseInt(args[1]) > 0) {
+				if (validateInteger(args[0]) && validateInteger(args[1])) {
 					numberOfClients = Integer.parseInt(args[0]);
 					port = Integer.parseInt(args[1]);
 				}else {
@@ -40,8 +39,7 @@ public class ServerMain {
 				break;
 			case 4:
 //				Checks that the input is numbers larger than 0 if they are use them and the provided text files, otherwise use the default options
-				if (args[0].matches("-?\\d+") && args[1].matches("-?\\d+")
-						&& Integer.parseInt(args[0]) > 0 && Integer.parseInt(args[1]) > 0) {
+				if (validateInteger(args[0]) && validateInteger(args[1])) {
 					numberOfClients = Integer.parseInt(args[0]);
 					port = Integer.parseInt(args[1]);
 					greenApplesFile = args[2];
@@ -83,6 +81,13 @@ public class ServerMain {
 			e.printStackTrace();
 		}
 		return server;
+	}
+	
+	private static boolean validateInteger(String integer) {
+		if (integer.matches("-?\\d+") && Integer.parseInt(integer) > 0) {
+			return true;
+		}
+		return false;
 	}
 	
 }

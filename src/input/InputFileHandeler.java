@@ -39,7 +39,7 @@ public class InputFileHandeler {
 		        sc.close();
 		    } 
 		    catch (FileNotFoundException e) {
-		    	System.out.println("cant find the file: " + textfile + ".\nEnter an correct file:");
+		    	System.out.println("cant find the text file: " + textfile + ".\nPlease enter a correct file:");
 				String newfile = readInput();
 				temp = scan(newfile);
 		    }

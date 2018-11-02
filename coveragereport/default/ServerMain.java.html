@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ServerMain.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">.</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">ServerMain.java</span></div><h1>ServerMain.java</h1><pre class="source lang-java linenums">import java.io.IOException;
+
+import cards.*;
+import controller.Game;
+import input.InputFileHandeler;
+import model.Model;
+import server.Server;
+import view.View;
+
+/**
+* This file starts the Server
+* @author Jesper Svensson
+*
+*/
+
+<span class="nc" id="L16">public class ServerMain {</span>
+
+	/**
+	 * Main function for running server.
+	 * @param args contains number of clients, port number, green apples file name and red apples file name. If not they will be set to default.
+	 */
+	public static void main(String[] args) {
+//		Default options that will be set if no arguments are provided.
+<span class="nc" id="L24">		String greenApplesFile = &quot;greenApples.txt&quot;;</span>
+<span class="nc" id="L25">		String redApplesFile = &quot;redApples.txt&quot;;</span>
+<span class="nc" id="L26">		int numberOfClients = 1;</span>
+<span class="nc" id="L27">		int port = 4545;</span>
+//		The switch will set options depending on how many arguments were provided
+<span class="nc bnc" id="L29" title="All 3 branches missed.">		switch(args.length) {</span>
+			case 2:
+//				Checks that the input is numbers larger than 0 if they are use them, otherwise use the default options
+<span class="nc bnc" id="L32" title="All 4 branches missed.">				if (validateInteger(args[0]) &amp;&amp; validateInteger(args[1])) {</span>
+<span class="nc" id="L33">					numberOfClients = Integer.parseInt(args[0]);</span>
+<span class="nc" id="L34">					port = Integer.parseInt(args[1]);</span>
+				}else {
+<span class="nc" id="L36">					System.out.println(&quot;The number of clients and the portnumber must be integers larger than 0&quot;);</span>
+<span class="nc" id="L37">					System.out.println(&quot;Starting server with default parameters&quot;);</span>
+				}
+<span class="nc" id="L39">				break;</span>
+			case 4:
+//				Checks that the input is numbers larger than 0 if they are use them and the provided text files, otherwise use the default options
+<span class="nc bnc" id="L42" title="All 4 branches missed.">				if (validateInteger(args[0]) &amp;&amp; validateInteger(args[1])) {</span>
+<span class="nc" id="L43">					numberOfClients = Integer.parseInt(args[0]);</span>
+<span class="nc" id="L44">					port = Integer.parseInt(args[1]);</span>
+<span class="nc" id="L45">					greenApplesFile = args[2];</span>
+<span class="nc" id="L46">					redApplesFile = args[3];</span>
+				}else {
+<span class="nc" id="L48">					System.out.println(&quot;The number of clients and the portnumber must be integers larger than 0&quot;);</span>
+<span class="nc" id="L49">					System.out.println(&quot;Starting server with default parameters&quot;);</span>
+				}
+<span class="nc" id="L51">				break;</span>
+			default:
+<span class="nc" id="L53">				System.out.println(&quot;Starting server with default parameters&quot;);</span>
+		}
+<span class="nc" id="L55">		View view = new View();</span>
+<span class="nc" id="L56">		Model model = setupModel(greenApplesFile, redApplesFile);</span>
+<span class="nc" id="L57">		Server server = startServer(numberOfClients, model, port);</span>
+<span class="nc" id="L58">		Game game = new Game(model, view, server);</span>
+<span class="nc" id="L59">		game.init();</span>
+<span class="nc" id="L60">		game.run();</span>
+<span class="nc" id="L61">	}</span>
+	
+	//Creates the model with two shuffled decks.
+	private static Model setupModel(String greenDeckFile, String redDeckFile) {
+<span class="nc" id="L65">		InputFileHandeler inputHandeler = new InputFileHandeler();</span>
+<span class="nc" id="L66">		DeckFactory deckFactory = new DeckFactory();</span>
+<span class="nc" id="L67">		Deck&lt;GreenCard&gt; greenDeck = deckFactory.createGreenDeck(inputHandeler.scan(greenDeckFile));</span>
+<span class="nc" id="L68">		greenDeck.shuffle();</span>
+<span class="nc" id="L69">		Deck&lt;RedCard&gt; redDeck = deckFactory.createRedDeck(inputHandeler.scan(redDeckFile));</span>
+<span class="nc" id="L70">		redDeck.shuffle();</span>
+<span class="nc" id="L71">		return new Model(redDeck, greenDeck);</span>
+	}
+	
+	//Starts the server with the amount of clients and the port number provided.
+	private static Server startServer(int numberOfClients, Model model ,int port) {
+<span class="nc" id="L76">		Server server = null;</span>
+		try {
+<span class="nc" id="L78">			server = new Server(numberOfClients, model, port);</span>
+<span class="nc" id="L79">			server.connectToClients();</span>
+<span class="nc" id="L80">		} catch (IOException e) {</span>
+<span class="nc" id="L81">			e.printStackTrace();</span>
+<span class="nc" id="L82">		}</span>
+<span class="nc" id="L83">		return server;</span>
+	}
+	
+	private static boolean validateInteger(String integer) {
+<span class="nc bnc" id="L87" title="All 4 branches missed.">		if (integer.matches(&quot;-?\\d+&quot;) &amp;&amp; Integer.parseInt(integer) &gt; 0) {</span>
+<span class="nc" id="L88">			return true;</span>
+		}
+<span class="nc" id="L90">		return false;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

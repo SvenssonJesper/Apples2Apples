@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">.</a> &gt; <a href="index.source.html" class="el_package">controller</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package controller;
+import java.io.IOException;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import model.Model;
+import view.View;
+import player.Bot;
+import player.Player;
+import server.Server;
+
+/**
+ * Game acts as a controller. Game uses model ,view and server.
+* @author Jesper Svensson
+*
+*/
+
+public class Game {
+	Server server;
+	Model model;
+	View view;
+	private Random rnd; 
+	private boolean run;
+	
+<span class="fc" id="L25">	public Game(Model model, View view, Server server) {</span>
+<span class="fc" id="L26">		this.model = model;</span>
+<span class="fc" id="L27">		this.view = view;</span>
+<span class="fc" id="L28">		this.server = server;</span>
+<span class="fc" id="L29">		this.rnd = ThreadLocalRandom.current();</span>
+<span class="fc" id="L30">	}</span>
+	/**
+	 * Initialize the game
+	 */
+	public void init() {
+<span class="fc" id="L35">		addBots();</span>
+<span class="fc" id="L36">	}</span>
+	/**
+	 * Sets the run variable
+	 * @param run the boolean that run should have.
+	 */
+	public void setRun(boolean run) {
+<span class="fc" id="L42">		this.run = run;</span>
+<span class="fc" id="L43">	}</span>
+	
+	/**
+	 * The game loop which follows the game flow.
+	 * This function follows the game flow of Apples 2 Apples.
+	 */
+	public void run() {
+<span class="fc" id="L50">		Player roundWinner = null;</span>
+<span class="fc" id="L51">		setRun(true);</span>
+<span class="fc" id="L52">		model.setRandomJudge();</span>
+<span class="fc" id="L53">		sendNameToClients();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">		while(run) {</span>
+//			Game flow
+<span class="fc" id="L56">			model.dealRedCards();</span>
+<span class="fc" id="L57">			model.clearAllPlayedCards();</span>
+<span class="fc" id="L58">			sendNewRoundMessage();</span>
+<span class="fc" id="L59">			model.popGreenCard();</span>
+<span class="fc" id="L60">			sendNewGreenCard();</span>
+<span class="fc" id="L61">			sendHand();</span>
+<span class="fc" id="L62">			receivePlayedCardsFromClients();</span>
+<span class="fc" id="L63">			receivePlayedCardsFromBots();</span>
+<span class="fc" id="L64">			model.shufflePlayedCards();</span>
+<span class="fc" id="L65">			sendPlayedCards();</span>
+<span class="fc" id="L66">			roundWinner = receiveRoundWinnerFromJudge();</span>
+<span class="fc" id="L67">			addPoint(roundWinner);</span>
+<span class="fc" id="L68">			sendRoundWinnerMessage(roundWinner);</span>
+<span class="fc" id="L69">			sendPonitsInformation();</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">			setRun(!model.isWinner(roundWinner));	</span>
+<span class="fc" id="L71">			model.setNextJudge();</span>
+		}
+<span class="fc" id="L73">		sendWinnerMessage(roundWinner);</span>
+<span class="fc" id="L74">		sendCloseClientsCommand();</span>
+<span class="fc" id="L75">		server.close();</span>
+<span class="fc" id="L76">	}</span>
+	
+	private void sendNameToClients() {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">		for(Player player: model.getPlayers()) {</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">			if(player.isHuman()) {</span>
+<span class="nc" id="L81">				server.sendTextToClient(player, view.nameMessage(player));</span>
+			}
+<span class="fc" id="L83">		}</span>
+		
+<span class="fc" id="L85">	}</span>
+	
+	private void sendPonitsInformation() {
+<span class="fc bfc" id="L88" title="All 2 branches covered.">		for(Player player: model.getPlayers()) {</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">			if(player.isHuman()) {</span>
+<span class="nc" id="L90">				server.sendTextToClient(player, view.sendPoints(player));</span>
+			}
+<span class="fc" id="L92">		}</span>
+<span class="fc" id="L93">	}</span>
+
+	private void sendInputCommand(Player player) {
+<span class="nc" id="L96">		sendMessageToClients(&quot;input&quot;);</span>
+<span class="nc" id="L97">	}</span>
+	
+	private void addBots() {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		while(model.getPlayers().size() &lt; 4) {</span>
+<span class="fc" id="L101">			model.addPlayer(new Bot(model.getPlayers().size()));</span>
+		}
+<span class="fc" id="L103">	}</span>
+	
+	private void sendCloseClientsCommand() {
+<span class="fc" id="L106">		sendMessageToClients(&quot;gameFinnished&quot;);</span>
+<span class="fc" id="L107">	}</span>
+	
+	private void sendMessageToClients(String text) {
+<span class="fc bfc" id="L110" title="All 2 branches covered.">		for(Player player: model.getPlayers()) {</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">			if(player.isHuman()) {</span>
+<span class="nc" id="L112">				server.sendTextToClient(player, text);</span>
+			}
+<span class="fc" id="L114">		}</span>
+<span class="fc" id="L115">	}</span>
+	
+	private void sendWinnerMessage(Player winner) {
+<span class="fc" id="L118">		sendMessageToClients(view.winnerMessage(winner));</span>
+<span class="fc" id="L119">	}</span>
+	
+	private void sendRoundWinnerMessage(Player roundWinner) {
+<span class="fc" id="L122">		sendMessageToClients(view.roundWinnerMessage(roundWinner, model.getCardThatPlayerPlayed(roundWinner)));</span>
+<span class="fc" id="L123">	}</span>
+	
+	private void addPoint(Player player) {
+<span class="fc" id="L126">		model.addPoint(player, model.getCurrentGreenCard());</span>
+<span class="fc" id="L127">	}</span>
+	
+	private void sendPlayedCards() {
+<span class="fc" id="L130">		sendMessageToClients(view.playedCardsMessage(model.getCurrentGreenCard(), model.playedCardsToString()));</span>
+<span class="fc" id="L131">	}</span>
+	
+	private Player receiveRoundWinnerFromJudge(){
+		int index;
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">		if(model.getJudge().isHuman()) {</span>
+<span class="nc" id="L136">				sendInputCommand(model.getJudge());</span>
+<span class="nc" id="L137">				index = receivePlayedCardIndexFromClient(model.getJudge());</span>
+<span class="nc" id="L138">				return model.getPlayerThatPlayedCard(index);</span>
+		}else {
+<span class="fc" id="L140">			index = rnd.nextInt(model.getNumberOfPlayedCards());</span>
+<span class="fc" id="L141">			return model.getPlayerThatPlayedCard(index);</span>
+		}
+	}
+	
+	private void sendNewGreenCard() {
+<span class="fc" id="L146">		sendMessageToClients(view.greenCardMessage(model.getCurrentGreenCard()));</span>
+<span class="fc" id="L147">	}</span>
+	
+	private void sendNewRoundMessage() {
+<span class="fc bfc" id="L150" title="All 2 branches covered.">		for(Player player: model.getPlayers()) {</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">			if (player.isHuman()) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">				if(player == model.getJudge())</span>
+<span class="nc" id="L153">					server.sendTextToClient(player, view.newRound(true));</span>
+				else {
+<span class="nc" id="L155">					server.sendTextToClient(player, view.newRound(false));</span>
+				}
+			}
+<span class="fc" id="L158">		}</span>
+<span class="fc" id="L159">	}</span>
+	
+	private void sendHand() {
+<span class="fc bfc" id="L162" title="All 2 branches covered.">		for(Player player: model.getPlayers()) {</span>
+<span class="pc bpc" id="L163" title="1 of 4 branches missed.">			if(player != model.getJudge() &amp;&amp; player.isHuman())</span>
+<span class="nc" id="L164">				server.sendTextToClient(player,view.sendHand(player));</span>
+<span class="fc" id="L165">		}</span>
+<span class="fc" id="L166">	}</span>
+	
+	private int receivePlayedCardIndexFromClient(Player player) {
+<span class="nc" id="L169">		int cardNumber = 0;</span>
+		try {
+<span class="nc" id="L171">			cardNumber = Integer.parseInt(server.receiveInput(player)); </span>
+<span class="nc" id="L172">		} catch (IOException e) {</span>
+<span class="nc" id="L173">			e.printStackTrace();</span>
+<span class="nc" id="L174">		}</span>
+//		Checks if the number that client sent was valid.
+//		Number must be larger than 0
+//		If the player is not the judge the number must be smaller than max hand size.
+//		If the player is the judge the number must be smaller than number of played cards.
+<span class="nc bnc" id="L179" title="All 4 branches missed.">		boolean judgeCondition =  ((player == model.getJudge()) &amp;&amp; cardNumber &gt;= model.getNumberOfPlayedCards());</span>
+<span class="nc bnc" id="L180" title="All 4 branches missed.">		boolean notJudgeCondition = ((player != model.getJudge()) &amp;&amp; cardNumber &gt;= model.getMaxHandSize());</span>
+		
+<span class="nc bnc" id="L182" title="All 6 branches missed.">		if(0 &gt; cardNumber || notJudgeCondition || judgeCondition) {</span>
+<span class="nc" id="L183">			server.sendTextToClient(player, &quot;Invalid input. Please choose a valid card number&quot;);</span>
+<span class="nc" id="L184">			sendInputCommand(player);</span>
+<span class="nc" id="L185">			cardNumber = receivePlayedCardIndexFromClient(player);</span>
+		}
+<span class="nc" id="L187">		return cardNumber;</span>
+	}
+	
+	private void receivePlayedCardsFromClients() {
+//		Tells clients that the should send inputs
+<span class="fc bfc" id="L192" title="All 2 branches covered.">		for(Player player: model.getPlayers()) {</span>
+<span class="pc bpc" id="L193" title="1 of 4 branches missed.">			if(player != model.getJudge() &amp;&amp; player.isHuman()) {</span>
+<span class="nc" id="L194">				sendInputCommand(player);</span>
+			}
+<span class="fc" id="L196">		}</span>
+//		reads the client inputs
+<span class="fc bfc" id="L198" title="All 2 branches covered.">		for(Player player: model.getPlayers()) {</span>
+<span class="pc bpc" id="L199" title="1 of 4 branches missed.">			if(player != model.getJudge() &amp;&amp; player.isHuman()) {</span>
+<span class="nc" id="L200">				model.playCard(player.playCard(receivePlayedCardIndexFromClient(player)), player);</span>
+			}
+<span class="fc" id="L202">		}</span>
+<span class="fc" id="L203">	}</span>
+	
+	private void receivePlayedCardsFromBots() {
+<span class="fc bfc" id="L206" title="All 2 branches covered.">		for(Player player: model.getPlayers()) {</span>
+<span class="pc bpc" id="L207" title="1 of 4 branches missed.">			if(player != model.getJudge() &amp;&amp; !player.isHuman()) {</span>
+<span class="fc" id="L208">				model.playCard(player.playCard(rnd.nextInt(player.getHandSize())), player);</span>
+			}
+<span class="fc" id="L210">		}</span>
+<span class="fc" id="L211">	}</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Deck.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">.</a> &gt; <a href="index.source.html" class="el_package">cards</a> &gt; <span class="el_source">Deck.java</span></div><h1>Deck.java</h1><pre class="source lang-java linenums">package cards;
+
+/**
+* Deck of Cards. Deck is generic typed.
+* @author Jesper Svensson
+*
+*/
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Deck&lt;CardType&gt; {
+	private ArrayList&lt;CardType&gt; deck;
+	/**
+	 * Constructor of Deck. Note that deck is generic typed.
+	 */
+<span class="fc" id="L17">	public Deck() {</span>
+<span class="fc" id="L18">		this.deck = new ArrayList&lt;CardType&gt;();</span>
+<span class="fc" id="L19">	}</span>
+	/**
+	 * Adds a card to the deck.
+	 * @param card the card that should be added to the deck.
+	 */
+	void add(CardType card) {
+<span class="fc" id="L25">		this.deck.add(card);</span>
+<span class="fc" id="L26">	}</span>
+	/**
+	 * Shuffles the deck with help of Collections.shuffle
+	 */
+	public void shuffle() {
+		//shuffles an ArrayList with 
+<span class="fc" id="L32">		Collections.shuffle(this.deck);</span>
+<span class="fc" id="L33">	}</span>
+	/**
+	 * Pops a card from the deck.
+	 * @return the first card in the deck.
+	 */
+	public CardType popCard(){
+<span class="fc" id="L39">		return deck.remove(0);</span>
+	}
+	/**
+	 * 
+	 * @return the size of the deck.
+	 */
+	public int size() {
+<span class="fc" id="L46">		return deck.size();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
