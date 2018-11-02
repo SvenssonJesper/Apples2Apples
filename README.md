@@ -1,7 +1,7 @@
-#Apples2Apples
-##Home exam 2018
+# Apples2Apples
+## Home exam 2018
   Home exam for course D7032E Software engineering. Deadline: 2018.11.02
-##How to run
+## How to run
 Example 1:
 
 Use Intellij or Eclipse to build and run the project.
