@@ -5,10 +5,10 @@
 Example 1:
 
 Use Intellij or Eclipse to build and run the project.
-Run ServerMain with 0, 2 or 4 parameters that represents ´´´number of clients´´´, ´´´port number´´´,
-´´´text file with green apples´´´and ´´´tex file with red apples´´´ in the following order.
-Run ClientMain with 0 or 2 parameters that represents ´´´ip address of the server´´´and
-´´´port number´´´in the following order.
+Run ServerMain with 0, 2 or 4 parameters that represents ```number of clients```, ```port number```,
+```text file with green apples```and ```tex file with red apples``` in the following order.
+Run ClientMain with 0 or 2 parameters that represents ```ip address of the server```and
+```port number```in the following order.
 
 Example 2:
 
